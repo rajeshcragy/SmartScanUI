@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:SmartScanUI.Views"
         xmlns:vm="clr-namespace:SmartScanUI.ViewModels"
-        Title="Scanner Admin - ACME CORPORATION" Height="780" Width="1100"
+        Title="Scanner Admin - ACME CORPORATION" Height="858" Width="1210"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="False">
@@ -13,7 +13,7 @@
 
     <Grid Background="{StaticResource SurfaceBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="110"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -35,7 +35,7 @@
         <!-- Main Content -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="242"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 

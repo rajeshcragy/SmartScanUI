@@ -65,11 +65,17 @@
     <Compile Include="Views\AdminView.xaml.cs">
       <DependentUpon>AdminView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PricingView.xaml.cs">
       <DependentUpon>PricingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ScannerControlView.xaml.cs">
+      <DependentUpon>ScannerControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SideBarView.xaml.cs">
       <DependentUpon>SideBarView.xaml</DependentUpon>
@@ -96,6 +102,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\HomeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -110,6 +119,9 @@
     <Page Include="Views\ScannerConfigView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ScannerControlView.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SideBarView.xaml">
       <Generator>MSBuild:Compile</Generator>

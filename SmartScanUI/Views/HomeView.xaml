@@ -1,0 +1,155 @@
+<UserControl x:Class="SmartScanUI.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <!-- Welcome Section -->
+            <Border Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Welcome to Scanner Admin" Style="{StaticResource HeaderText}"/>
+                    <TextBlock Text="ACME CORPORATION - Scanner Management System" Foreground="Gray" Margin="0,0,0,12" FontSize="14"/>
+                    <TextBlock Text="Manage your scanning devices and configurations from this central hub." Foreground="#555" LineHeight="20" Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Quick Stats Section -->
+            <Grid Margin="0,0,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Active Scanners -->
+                <Border Background="White" Padding="16" CornerRadius="6" Margin="0,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="Active Scanners" FontWeight="Bold" FontSize="12" Foreground="Gray" Margin="0,0,0,8"/>
+                        <TextBlock Text="5" FontSize="32" FontWeight="Bold" Foreground="#007ACC"/>
+                        <TextBlock Text="devices online" FontSize="11" Foreground="Gray" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total Scans -->
+                <Border Background="White" Padding="16" CornerRadius="6" Margin="6,0,6,0">
+                    <StackPanel>
+                        <TextBlock Text="Total Scans" FontWeight="Bold" FontSize="12" Foreground="Gray" Margin="0,0,0,8"/>
+                        <TextBlock Text="1,247" FontSize="32" FontWeight="Bold" Foreground="#28A745"/>
+                        <TextBlock Text="this month" FontSize="11" Foreground="Gray" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- System Status -->
+                <Border Background="White" Padding="16" CornerRadius="6" Margin="6,0,0,0">
+                    <StackPanel>
+                        <TextBlock Text="System Status" FontWeight="Bold" FontSize="12" Foreground="Gray" Margin="0,0,0,8"/>
+                        <TextBlock Text="✓ Operational" FontSize="32" FontWeight="Bold" Foreground="#28A745"/>
+                        <TextBlock Text="all systems" FontSize="11" Foreground="Gray" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Quick Links Section -->
+            <Border Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Quick Navigation" Style="{StaticResource HeaderText}"/>
+                    <TextBlock Text="Get started by selecting an option below" Foreground="Gray" Margin="0,0,0,12" FontSize="12"/>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0" Grid.Column="0" Background="#F5F5F5" Padding="12" CornerRadius="4" Margin="0,0,8,8" BorderBrush="#E0E0E0" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="📡" FontSize="28" Margin="0,0,0,8"/>
+                                <TextBlock Text="Scanner Control" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock Text="Manage and control scanner devices" FontSize="11" Foreground="Gray" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="0" Grid.Column="1" Background="#F5F5F5" Padding="12" CornerRadius="4" Margin="8,0,0,8" BorderBrush="#E0E0E0" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="⚙️" FontSize="28" Margin="0,0,0,8"/>
+                                <TextBlock Text="Configurations" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock Text="Configure scanner settings" FontSize="11" Foreground="Gray" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="0" Background="#F5F5F5" Padding="12" CornerRadius="4" Margin="0,0,8,0" BorderBrush="#E0E0E0" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="💰" FontSize="28" Margin="0,0,0,8"/>
+                                <TextBlock Text="Pricing" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock Text="View pricing information" FontSize="11" Foreground="Gray" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Row="1" Grid.Column="1" Background="#F5F5F5" Padding="12" CornerRadius="4" Margin="8,0,0,0" BorderBrush="#E0E0E0" BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="👤" FontSize="28" Margin="0,0,0,8"/>
+                                <TextBlock Text="User Profile" FontWeight="Bold" FontSize="13"/>
+                                <TextBlock Text="Manage your account" FontSize="11" Foreground="Gray" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Recent Activity Section -->
+            <Border Background="White" Padding="16" CornerRadius="6">
+                <StackPanel>
+                    <TextBlock Text="Recent Activity" Style="{StaticResource HeaderText}"/>
+                    <TextBlock Text="Latest operations in your system" Foreground="Gray" Margin="0,0,0,12" FontSize="12"/>
+
+                    <StackPanel Margin="0,8,0,0">
+                        <Border BorderThickness="0,1,0,0" BorderBrush="#E0E0E0" Padding="0,8,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Scanner Device #3 came online" FontWeight="SemiBold" FontSize="12"/>
+                                    <TextBlock Text="2 hours ago" Foreground="Gray" FontSize="11" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="✓" FontSize="18" Foreground="#28A745" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <Border BorderThickness="0,1,0,0" BorderBrush="#E0E0E0" Padding="0,8,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Configuration updated for Device #1" FontWeight="SemiBold" FontSize="12"/>
+                                    <TextBlock Text="5 hours ago" Foreground="Gray" FontSize="11" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="⚙️" FontSize="18" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <Border BorderThickness="0,1,0,0" BorderBrush="#E0E0E0" Padding="0,8,0,8">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="System backup completed" FontWeight="SemiBold" FontSize="12"/>
+                                    <TextBlock Text="1 day ago" Foreground="Gray" FontSize="11" Margin="0,2,0,0"/>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="✓" FontSize="18" Foreground="#28A745" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

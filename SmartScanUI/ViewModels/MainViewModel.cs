@@ -1,4 +1,6 @@
+using System;
 using System.Windows;
+using System.Windows.Controls;
 using SmartScanUI.Helpers;
 using SmartScanUI.Views;
 
@@ -10,7 +12,6 @@ namespace SmartScanUI.ViewModels
         public AdvancedSettingsViewModel AdvancedSettings { get; }
         public SidebarViewModel Sidebar { get; }
 
-        private UIElement _currentWorkspace;
         public UIElement CurrentWorkspace
         {
             get => Get<UIElement>();
@@ -23,12 +24,17 @@ namespace SmartScanUI.ViewModels
             AdvancedSettings = new AdvancedSettingsViewModel();
             Sidebar = new SidebarViewModel(this);
 
-            NavigateToScanner();
+            NavigateToHome();
         }
 
-        public void NavigateToScanner()
+        public void NavigateToHome()
         {
-            CurrentWorkspace = new ScannerConfigView { DataContext = ScannerConfig };
+            CurrentWorkspace = CreateViewByName("HomeView");
+        }
+
+        public void NavigateToScannerControl()
+        {
+            CurrentWorkspace = CreateViewByName("ScannerControlView");
         }
 
         public void NavigateToPricing()
@@ -49,6 +55,23 @@ namespace SmartScanUI.ViewModels
         public void NavigateToAdmin()
         {
             CurrentWorkspace = new AdminView();
+        }
+
+        private UIElement CreateViewByName(string viewName)
+        {
+            try
+            {
+                var viewType = Type.GetType($"SmartScanUI.Views.{viewName}");
+                if (viewType != null)
+                {
+                    return (UIElement)Activator.CreateInstance(viewType);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error creating view {viewName}: {ex.Message}");
+            }
+            return new Grid(); // fallback
         }
     }
 }

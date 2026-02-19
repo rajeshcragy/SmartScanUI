@@ -5,6 +5,7 @@ namespace SmartScanUI.ViewModels
 {
     public class SidebarViewModel : BaseViewModel
     {
+        public RelayCommand HomeCommand { get; }
         public RelayCommand ScannerCommand { get; }
         public RelayCommand PricingCommand { get; }
         public RelayCommand UserProfileCommand { get; }
@@ -14,7 +15,8 @@ namespace SmartScanUI.ViewModels
 
         public SidebarViewModel(MainViewModel parentViewModel)
         {
-            ScannerCommand = new RelayCommand(_ => parentViewModel.NavigateToScanner());
+            HomeCommand = new RelayCommand(_ => parentViewModel.NavigateToHome());
+            ScannerCommand = new RelayCommand(_ => parentViewModel.NavigateToScannerControl());
             PricingCommand = new RelayCommand(_ => parentViewModel.NavigateToPricing());
             UserProfileCommand = new RelayCommand(_ => parentViewModel.NavigateToUserProfile());
             ConfigurationsCommand = new RelayCommand(_ => parentViewModel.NavigateToConfigurations());
