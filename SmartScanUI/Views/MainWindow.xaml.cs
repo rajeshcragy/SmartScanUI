@@ -8,5 +8,10 @@ namespace SmartScanUI.Views
         {
             InitializeComponent();
         }
+
+        private void SidebarView_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
