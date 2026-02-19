@@ -41,18 +41,13 @@
 
             <!-- Sidebar -->
             <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
-                <views:SidebarView Loaded="SidebarView_Loaded"/>
+                <views:SidebarView DataContext="{Binding Sidebar}"/>
             </Border>
 
             <!-- Content -->
             <DockPanel Grid.Column="1" Margin="18">
-                <!-- Main panels -->
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel>
-                        <views:ScannerConfigView DataContext="{Binding ScannerConfig}"/>
-                        <views:AdvancedSettingsView DataContext="{Binding AdvancedSettings}"/>
-                    </StackPanel>
-                </ScrollViewer>
+                <!-- Workspace Content Area -->
+                <ContentControl DockPanel.Dock="Top" Content="{Binding CurrentWorkspace}" Margin="0,0,0,12"/>
 
                 <!-- Footer -->
                 <Border DockPanel.Dock="Bottom" Background="#EFEFEF" Padding="10" Margin="0,12,0,0">

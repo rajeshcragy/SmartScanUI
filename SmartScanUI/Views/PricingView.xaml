@@ -1,0 +1,44 @@
+<UserControl x:Class="SmartScanUI.Views.PricingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Border Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Pricing Management" Style="{StaticResource HeaderText}"/>
+                    <TextBlock Text="Configure pricing settings and billing options" Foreground="Gray" Margin="0,0,0,12"/>
+
+                    <Grid Margin="0,6,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="PRICING TIER" FontWeight="SemiBold"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1">
+                            <ComboBoxItem>Standard</ComboBoxItem>
+                            <ComboBoxItem>Professional</ComboBoxItem>
+                            <ComboBoxItem>Enterprise</ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="BILLING CYCLE" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,12,0,0">
+                            <ComboBoxItem>Monthly</ComboBoxItem>
+                            <ComboBoxItem>Quarterly</ComboBoxItem>
+                            <ComboBoxItem>Annually</ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="DISCOUNT CODE" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,12,0,0"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

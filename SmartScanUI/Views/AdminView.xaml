@@ -1,0 +1,53 @@
+<UserControl x:Class="SmartScanUI.Views.AdminView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Border Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="Admin Panel" Style="{StaticResource HeaderText}"/>
+                    <TextBlock Text="Administrative controls and system settings" Foreground="Gray" Margin="0,0,0,12"/>
+
+                    <Grid Margin="0,6,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="SYSTEM STATUS" FontWeight="SemiBold"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="✓ All Systems Operational" Foreground="Green" FontWeight="SemiBold"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="LOG LEVEL" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,12,0,0">
+                            <ComboBoxItem>Debug</ComboBoxItem>
+                            <ComboBoxItem>Info</ComboBoxItem>
+                            <ComboBoxItem>Warning</ComboBoxItem>
+                            <ComboBoxItem>Error</ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="MAINTENANCE MODE" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                        <CheckBox Grid.Row="2" Grid.Column="1" Margin="0,12,0,0" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <Border Background="#FFF3CD" BorderBrush="#FFC107" BorderThickness="1" CornerRadius="4" Padding="12" Margin="0,20,0,0">
+                        <StackPanel>
+                            <TextBlock Text="⚠ Maintenance Mode" FontWeight="Bold" Foreground="#856404"/>
+                            <TextBlock Text="When enabled, only administrators can access the system." Foreground="#856404" Margin="0,4,0,0" FontSize="12"/>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                        <Button Content="Apply Settings" Padding="12,8" Background="#007ACC" Foreground="White" Margin="0,0,8,0"/>
+                        <Button Content="View Logs" Padding="12,8" Background="#6C757D" Foreground="White"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

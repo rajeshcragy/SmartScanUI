@@ -1,0 +1,50 @@
+<UserControl x:Class="SmartScanUI.Views.UserProfileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <Border Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,12">
+                <StackPanel>
+                    <TextBlock Text="User Profile" Style="{StaticResource HeaderText}"/>
+                    <TextBlock Text="Manage your account profile and preferences" Foreground="Gray" Margin="0,0,0,12"/>
+
+                    <Grid Margin="0,6,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="USERNAME" FontWeight="SemiBold"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" IsReadOnly="True" Background="#F5F5F5"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="EMAIL ADDRESS" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,12,0,0"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="THEME PREFERENCE" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,12,0,0">
+                            <ComboBoxItem>Dark</ComboBoxItem>
+                            <ComboBoxItem>Light</ComboBoxItem>
+                            <ComboBoxItem>Auto</ComboBoxItem>
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="LANGUAGE" FontWeight="SemiBold" Margin="0,12,0,0"/>
+                        <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,12,0,0">
+                            <ComboBoxItem>English</ComboBoxItem>
+                            <ComboBoxItem>Spanish</ComboBoxItem>
+                            <ComboBoxItem>French</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+
+                    <Button Content="Save Changes" Margin="0,20,0,0" Padding="12,8" Background="#007ACC" Foreground="White" Width="120" HorizontalAlignment="Left"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

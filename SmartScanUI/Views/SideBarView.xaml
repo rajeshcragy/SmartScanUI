@@ -39,45 +39,58 @@
     </UserControl.Resources>
 
     <Grid Background="#2D2D30">
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="12">
-                <TextBlock Text="MENU" FontWeight="Bold" Foreground="White" FontSize="11" Margin="0,0,0,16" Opacity="0.7"/>
-
-                <Button Style="{StaticResource SidebarNavButton}">
+        <DockPanel>
+            <!-- Logout Button at Bottom -->
+            <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="#3E3E42" Padding="12">
+                <Button Style="{StaticResource SidebarNavButton}" Command="{Binding LogoutCommand}" Margin="0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="📡" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Scanner" VerticalAlignment="Center" Foreground="White"/>
+                        <TextBlock Text="🚪" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Logout" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                 </Button>
+            </Border>
 
-                <Button Style="{StaticResource SidebarNavButton}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="💰" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Pricing" VerticalAlignment="Center" Foreground="White"/>
-                    </StackPanel>
-                </Button>
+            <!-- Navigation Menu -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="12">
+                    <TextBlock Text="" FontWeight="Bold" Foreground="White" FontSize="11" Margin="0,0,0,16" Opacity="0.7"/>
 
-                <Button Style="{StaticResource SidebarNavButton}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="👤" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="User Profile" VerticalAlignment="Center" Foreground="White"/>
-                    </StackPanel>
-                </Button>
+                    <Button Style="{StaticResource SidebarNavButton}" Command="{Binding ScannerCommand}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="📡" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Scanner" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </Button>
 
-                <Button Style="{StaticResource SidebarNavButton}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="⚙️" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Configurations" VerticalAlignment="Center" Foreground="White"/>
-                    </StackPanel>
-                </Button>
+                    <Button Style="{StaticResource SidebarNavButton}" Command="{Binding PricingCommand}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="💰" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Pricing" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </Button>
 
-                <Button Style="{StaticResource SidebarNavButton}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="🔑" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                        <TextBlock Text="Admin" VerticalAlignment="Center" Foreground="White"/>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-        </ScrollViewer>
+                    <Button Style="{StaticResource SidebarNavButton}" Command="{Binding UserProfileCommand}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="👤" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="User Profile" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarNavButton}" Command="{Binding ConfigurationsCommand}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="⚙️" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Configurations" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource SidebarNavButton}" Command="{Binding AdminCommand}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🔑" FontSize="18" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Admin" VerticalAlignment="Center" Foreground="White"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
     </Grid>
 </UserControl>
