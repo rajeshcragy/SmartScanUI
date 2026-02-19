@@ -1,6 +1,6 @@
-using ScannerAdminApp.Helpers;
+using SmartScanUI.Helpers;
 
-namespace ScannerAdminApp.ViewModels
+namespace SmartScanUI.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {

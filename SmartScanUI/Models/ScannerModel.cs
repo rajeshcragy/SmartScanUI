@@ -1,4 +1,4 @@
-namespace ScannerAdminApp.Models
+namespace SmartScanUI.Models
 {
     public class ScannerModel
     {

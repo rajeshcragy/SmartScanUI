@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ScannerAdminApp.Views
+namespace SmartScanUI.Views
 {
     public partial class MainWindow : Window
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace ScannerAdminApp.Helpers
+namespace SmartScanUI.Helpers
 {
     public class RelayCommand : ICommand
     {

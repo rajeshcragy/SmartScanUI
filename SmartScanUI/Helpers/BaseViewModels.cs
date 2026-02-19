@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace ScannerAdminApp.Helpers
+namespace SmartScanUI.Helpers
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        private readonly Dictionary<string, object> _values = new();
+        private readonly Dictionary<string, object> _values = new Dictionary<string, object>();
 
         protected T Get<T>([CallerMemberName] string name = null)
         {

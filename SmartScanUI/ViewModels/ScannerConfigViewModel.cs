@@ -1,33 +1,33 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using ScannerAdminApp.Helpers;
+using SmartScanUI.Helpers;
 
-namespace ScannerAdminApp.ViewModels
+namespace SmartScanUI.ViewModels
 {
     public class ScannerConfigViewModel : BaseViewModel
     {
         public string PrimaryScanner { get => Get<string>(); set => Set(value); }
 
-        public ObservableCollection<string> Resolutions { get; } = new()
+        public ObservableCollection<string> Resolutions { get; } = new ObservableCollection<string>
         {
             "200 DPI (Draft)", "300 DPI", "600 DPI"
         };
         public string SelectedResolution { get => Get<string>(); set => Set(value); }
 
-        public ObservableCollection<string> PaperSizes { get; } = new()
+        public ObservableCollection<string> PaperSizes { get; } = new ObservableCollection<string>
         {
             "A4 (210x297mm)", "Letter (8.5x11in)"
         };
         public string SelectedPaperSize { get => Get<string>(); set => Set(value); }
 
-        public ObservableCollection<string> ColorModes { get; } = new()
+        public ObservableCollection<string> ColorModes { get; } = new ObservableCollection<string>
         {
             "Black & White", "Grayscale", "Color"
         };
         public string SelectedColorMode { get => Get<string>(); set => Set(value); }
 
-        public ObservableCollection<string> DuplexModes { get; } = new()
+        public ObservableCollection<string> DuplexModes { get; } = new ObservableCollection<string>
         {
             "Single-sided", "Double-sided"
         };
