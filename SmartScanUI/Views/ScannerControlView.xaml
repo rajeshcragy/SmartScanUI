@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="SmartScanUI.Views.ScannerControlView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:local="clr-namespace:SmartScanUI.ViewModels">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -44,32 +45,22 @@
             <!-- Section 1: Session Image List -->
             <Border Grid.Column="0" Grid.Row="0" Background="White" Padding="12" CornerRadius="6" Margin="0,0,6,12" BorderBrush="#E0E0E0" BorderThickness="1">
                 <StackPanel>
-                    <TextBlock Text="📋 Session" FontWeight="Bold" FontSize="12" Margin="0,0,0,8"/>
+                    <TextBlock Text="📋 Sessions" FontWeight="Bold" FontSize="12" Margin="0,0,0,8"/>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400">
-                        <StackPanel>
-                            <!-- Session items -->
-                            <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6" Cursor="Hand">
-                                <StackPanel>
-                                    <Border Background="#D0D0D0" CornerRadius="2" Height="60" Margin="0,0,0,6"/>
-                                    <TextBlock Text="Session 1" FontSize="10" FontWeight="Bold"/>
-                                    <TextBlock Text="10:30 AM" FontSize="9" Foreground="Gray"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6" Cursor="Hand">
-                                <StackPanel>
-                                    <Border Background="#D0D0D0" CornerRadius="2" Height="60" Margin="0,0,0,6"/>
-                                    <TextBlock Text="Session 2" FontSize="10" FontWeight="Bold"/>
-                                    <TextBlock Text="09:15 AM" FontSize="9" Foreground="Gray"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6" Cursor="Hand">
-                                <StackPanel>
-                                    <Border Background="#D0D0D0" CornerRadius="2" Height="60" Margin="0,0,0,6"/>
-                                    <TextBlock Text="Session 3" FontSize="10" FontWeight="Bold"/>
-                                    <TextBlock Text="08:45 AM" FontSize="9" Foreground="Gray"/>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
+                        <ItemsControl ItemsSource="{Binding Sessions}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="8" Margin="0,0,0,6" Cursor="Hand">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Id}" FontSize="10" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding StartTimeValue, StringFormat='Start: {0:g}'}" FontSize="9" Foreground="Gray"/>
+                                            <TextBlock Text="{Binding EndTimeValue, StringFormat='End: {0:g}'}" FontSize="9" Foreground="Gray"/>
+                                            <TextBlock Text="{Binding PageCountValue, StringFormat='Pages: {0}'}" FontSize="9" Foreground="Gray" Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </ScrollViewer>
                 </StackPanel>
             </Border>
