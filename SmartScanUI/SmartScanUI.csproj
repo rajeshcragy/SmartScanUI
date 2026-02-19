@@ -116,12 +116,13 @@
     <Page Include="Views\PricingView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\ScannerConfigView.xaml">
+    <Page Include="Views\ScannerControlView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ScannerControlView.xaml">
+    <Page Include="Views\ScannerConfigView.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SideBarView.xaml">
       <Generator>MSBuild:Compile</Generator>

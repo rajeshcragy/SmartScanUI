@@ -34,7 +34,8 @@ namespace SmartScanUI.ViewModels
 
         public void NavigateToScannerControl()
         {
-            CurrentWorkspace = CreateViewByName("ScannerControlView");
+            //CurrentWorkspace = CreateViewByName("ScannerControlView");
+            CurrentWorkspace = new ScannerControlView();
         }
 
         public void NavigateToPricing()
