@@ -129,7 +129,7 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
                         </Grid.ColumnDefinitions>
 
                         <!-- Start Scan Button -->
-                        <Button Grid.Column="0" Padding="12,10" Background="#28A745" Foreground="White" Margin="0,0,8,0" FontSize="12" FontWeight="Bold">
+                        <Button Grid.Column="0" Padding="12,10" Background="#28A745" Foreground="White" Margin="0,0,8,0" FontSize="12" FontWeight="Bold" Click="StartScanButton_Click">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="▶" Margin="0,0,8,0" FontSize="14"/>
                                 <TextBlock Text="Start Scan"/>
@@ -137,7 +137,7 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
                         </Button>
 
                         <!-- Stop Scan Button -->
-                        <Button Grid.Column="1" Padding="12,10" Background="#DC3545" Foreground="White" Margin="8,0,0,0" FontSize="12" FontWeight="Bold">
+                        <Button Grid.Column="1" Padding="12,10" Background="#DC3545" Foreground="White" Margin="8,0,0,0" FontSize="12" FontWeight="Bold" Click="StopScanButton_Click">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                 <TextBlock Text="⏹" Margin="0,0,8,0" FontSize="14"/>
                                 <TextBlock Text="Stop Scan"/>
