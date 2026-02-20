@@ -35,6 +35,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.CZUROcxLib">
+      <HintPath>..\ScanDll\AxInterop.CZUROcxLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.CZUROcxLib">
+      <HintPath>..\ScanDll\Interop.CZUROcxLib.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -63,6 +70,7 @@
     <Compile Include="Helpers\SessionDataService.cs" />
     <Compile Include="Models\ScannerModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Scanner\CZUR\CzurEngine.cs" />
     <Compile Include="ViewModels\AdvancedSettingsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ScannerConfigViewModel.cs" />
