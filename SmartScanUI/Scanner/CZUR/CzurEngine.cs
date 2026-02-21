@@ -12,9 +12,9 @@ namespace SmartScanUI.Scanner.CZUR
     {
 
         private AxCZUROcxLib.AxCZUROcx axCZUROcx1;
-        public CzurEngine()
+        public CzurEngine(AxCZUROcxLib.AxCZUROcx ScannerControl)
         {
-
+            axCZUROcx1 = ScannerControl;
         }
 
         public string GetLicenseInfo()

@@ -60,6 +60,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -73,6 +74,7 @@
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Scanner\CZUR\CzurEnums.cs" />
     <Compile Include="Scanner\CZUR\CzurEngine.cs" />
+    <Compile Include="Scanner\ScannerHelper.cs" />
     <Compile Include="ViewModels\AdvancedSettingsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ScannerConfigViewModel.cs" />

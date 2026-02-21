@@ -69,14 +69,11 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
             <Border Grid.Column="1" Grid.Row="0" Background="White" Padding="16" CornerRadius="6" Margin="6,0,6,12" BorderBrush="#E0E0E0" BorderThickness="1">
                 <StackPanel>
                     <TextBlock Text="📄 PDF Preview" FontWeight="Bold" FontSize="12" Margin="0,0,0,12"/>
-                    <Border Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="📑" FontSize="72" HorizontalAlignment="Center" Margin="0,0,0,12"/>
-                                <TextBlock Text="PDF Preview Area" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center" Foreground="Gray"/>
-                                <TextBlock Text="Scan documents to preview PDF" FontSize="11" HorizontalAlignment="Center" Foreground="Gray" Margin="0,8,0,0"/>
-                                <TextBlock Text="No Document Selected" FontSize="10" HorizontalAlignment="Center" Foreground="#999" Margin="0,4,0,0"/>
-                            </StackPanel>
+                    <Border Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="4" HorizontalAlignment="Stretch" Height="379" Width="377">
+                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Name="ActiveXScanner">
+
+
+
                         </Grid>
                     </Border>
                 </StackPanel>
