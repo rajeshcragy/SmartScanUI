@@ -27,18 +27,13 @@ namespace SmartScanUI.Views
 
         private void LoadActiveXControl()
         {
-            
-
-                // Create the interop host control.
             System.Windows.Forms.Integration.WindowsFormsHost host =
                     new System.Windows.Forms.Integration.WindowsFormsHost();
 
-            // Create the ActiveX control.
              axCZUROcx1 = new AxCZUROcxLib.AxCZUROcx();
 
-            axCZUROcx1.Height = 100;
-            axCZUROcx1.Width = 100;
-            // Assign the ActiveX control as the host control's child.
+            axCZUROcx1.Height = (int)ActiveXScanner.Height;
+            axCZUROcx1.Width = (int)ActiveXScanner.Width;
             host.Child = axCZUROcx1;
 
             // Add the interop host control to the Grid
@@ -48,7 +43,8 @@ namespace SmartScanUI.Views
 
         private void StartScanButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Start Scan button clicked!", "Start Scan", MessageBoxButton.OK, MessageBoxImage.Information);
+            Scanner.ScannerHelper scannerHelper =new Scanner.ScannerHelper(axCZUROcx1);  
+            scannerHelper.Initialize();
         }
 
         private void StopScanButton_Click(object sender, RoutedEventArgs e)

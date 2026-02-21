@@ -30,6 +30,16 @@ namespace SmartScanUI.Scanner.CZUR
         DeviceNotConnected = 17,
         DeviceNotSupported = 18
     }
+
+    internal enum CzurSetProcessTypeStatus
+    {
+        Success = 0,
+        EnvironmentNotInitialized = 2,
+        DeviceNotSupported = 18,
+        MainCameraIsOff = 19,
+        MainCameraIsRecording = 23,
+        InvalidProcessingMethod = 31
+    }
 }
 
 

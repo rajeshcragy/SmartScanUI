@@ -64,5 +64,11 @@ namespace SmartScanUI.Scanner.CZUR
         }
 
 
+        public string SetProcessType(int type)
+        {
+            var status = (CzurSetProcessTypeStatus)axCZUROcx1.CZUR_SetProcessType(type);
+            return status == CzurSetProcessTypeStatus.Success ? String.Empty : $"Failed to Set Process Type: {status}";
+        }
+
     }
 }
