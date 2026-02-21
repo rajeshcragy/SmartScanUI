@@ -47,6 +47,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -70,6 +71,7 @@
     <Compile Include="Helpers\SessionDataService.cs" />
     <Compile Include="Models\ScannerModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Scanner\CZUR\CzurEnums.cs" />
     <Compile Include="Scanner\CZUR\CzurEngine.cs" />
     <Compile Include="ViewModels\AdvancedSettingsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
