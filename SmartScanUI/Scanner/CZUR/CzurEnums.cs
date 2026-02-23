@@ -40,6 +40,22 @@ namespace SmartScanUI.Scanner.CZUR
         MainCameraIsRecording = 23,
         InvalidProcessingMethod = 31
     }
+    internal enum CzurDeviceModelStatus
+    {
+        Error = 0,
+        CZUROcxisNotInilialized = 2,
+        DeviceDisconnected = 17
+    }
+
+    internal enum CzurCloseDeviceStatus
+    {
+        Success = 0,
+        CZUROcxisnotinitialized = 2,
+        InvalidserialNoofcamera = 8,
+        Thedeviceisoff = 19,
+        Recordingorfacerecognitionisinprogress = 23
+    }
+    
 }
 
 

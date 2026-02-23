@@ -63,12 +63,30 @@ namespace SmartScanUI.Scanner.CZUR
             return status == CzurOpenDeviceStatus.Success ? String.Empty : $"Failed to open device with status: {status}";
         }
 
+        public string CloseDevice(int index)
+        {
+            var status=axCZUROcx1.CZUR_CloseDevice(index);
+            return status;
+        }
 
         public string SetProcessType(int type)
         {
             var status = (CzurSetProcessTypeStatus)axCZUROcx1.CZUR_SetProcessType(type);
             return status == CzurSetProcessTypeStatus.Success ? String.Empty : $"Failed to Set Process Type: {status}";
         }
+
+        public string GetDeviceModel()
+        {
+            var deviceModel =axCZUROcx1.CZUR_GetDeviceModel();
+            return deviceModel;
+        }
+
+        public string GetDeviceId()
+        {
+            var deviceId=axCZUROcx1.CZUR_GetDeviceID();
+            return deviceId;
+        }
+
 
     }
 }
