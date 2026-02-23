@@ -141,7 +141,7 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
                     </Grid>
 
                     <!-- Scan Status Info -->
-                    <Border Background="#F5F5F5" Padding="12" CornerRadius="4">
+                    <Border Background="#F5F5F5" Padding="5" CornerRadius="4">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -149,7 +149,7 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Scan Status" FontWeight="Bold" FontSize="11"/>
-                                <TextBlock Text="Ready. Select a scanner device and click 'Start Scan' to begin." Foreground="Gray" FontSize="10" Margin="0,4,0,0" Width="517"/>
+                                <TextBlock Text="{Binding ScannerStatus}" Foreground="Gray" FontSize="10" Margin="0,4,0,0" Width="517" TextWrapping="Wrap"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0">
                                 <TextBlock Text="Pages: 0" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right"/>

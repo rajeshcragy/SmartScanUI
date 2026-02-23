@@ -13,9 +13,11 @@ namespace SmartScanUI.ViewModels
         private string _scansJsonPath;
 
         public ObservableCollection<SessionModel> Sessions { get => Get<ObservableCollection<SessionModel>>(); set => Set(value); }
+        public string ScannerStatus { get => Get<string>(); set => Set(value); }
 
         public SessionImageListViewModel()
         {
+            ScannerStatus = "Ready. Select a scanner device and click 'Start Scan' to begin.";
             InitializeSessionDataService();
             LoadSessions();
         }

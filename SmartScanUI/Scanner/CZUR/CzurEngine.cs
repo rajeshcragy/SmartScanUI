@@ -26,7 +26,7 @@ namespace SmartScanUI.Scanner.CZUR
         {
             string strLicense = GetLicenseInfo();
             var status = (CzurInitializationStatus)axCZUROcx1.CZUR_Initialize(strLicense);
-            if (status == CzurInitializationStatus.Success)
+            if (status == CzurInitializationStatus.Success || status==CzurInitializationStatus.AlreadyInitialized)
             {
                 return String.Empty;
             }

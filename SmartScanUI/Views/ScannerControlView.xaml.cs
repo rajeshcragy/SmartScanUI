@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using SmartScanUI.ViewModels;
+using SmartScanUI.Scanner;
 
 namespace SmartScanUI.Views
 {
@@ -14,6 +15,8 @@ namespace SmartScanUI.Views
     {
         private SessionImageListViewModel _viewModel;
         public AxCZUROcxLib.AxCZUROcx axCZUROcx1;
+        private ScannerHelper _scannerHelper;
+
         public ScannerControlView()
         {
             InitializeComponent();
@@ -22,7 +25,6 @@ namespace SmartScanUI.Views
 
             _viewModel = new SessionImageListViewModel();
             this.DataContext = _viewModel;
-
         }
 
         private void LoadActiveXControl()
@@ -43,8 +45,18 @@ namespace SmartScanUI.Views
 
         private void StartScanButton_Click(object sender, RoutedEventArgs e)
         {
-            Scanner.ScannerHelper scannerHelper =new Scanner.ScannerHelper(axCZUROcx1);  
-            scannerHelper.Initialize();
+            _scannerHelper = new ScannerHelper(axCZUROcx1);
+            _scannerHelper.StatusChanged += ScannerHelper_StatusChanged;
+            _scannerHelper.Initialize();
+        }
+
+        private void ScannerHelper_StatusChanged(object sender, SmartScanUI.Scanner.ScannerHelper.StatusChangedEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _viewModel.ScannerStatus = e.Status;
+                System.Diagnostics.Debug.WriteLine($"[{e.Timestamp:HH:mm:ss.fff}] Scanner Status: {e.Status}");
+            });
         }
 
         private void StopScanButton_Click(object sender, RoutedEventArgs e)

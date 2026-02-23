@@ -7,10 +7,10 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ScannerAdminApp")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Scanner Applicaiton")]
+[assembly: AssemblyDescription("Scan the Exam Ansersheets - rajeshcragy@gmail.com")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Genesis")]
 [assembly: AssemblyProduct("ScannerAdminApp")]
 [assembly: AssemblyCopyright("Copyright ©  2026")]
 [assembly: AssemblyTrademark("")]
