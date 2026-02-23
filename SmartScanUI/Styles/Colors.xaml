@@ -1,9 +1,59 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Color x:Key="PrimaryColor">#007ACC</Color>
-    <Color x:Key="SidebarBg">#2D2D30</Color>
-    <Color x:Key="Surface">#F7F7F8</Color>
+    <!-- Radiant Blue Theme Colors -->
+    <Color x:Key="PrimaryColor">#0066FF</Color>
+    <Color x:Key="PrimaryDark">#0052CC</Color>
+    <Color x:Key="PrimaryLight">#3385FF</Color>
+    <Color x:Key="AccentColor">#00A8FF</Color>
+    <Color x:Key="SidebarBg">#0A1E3E</Color>
+    <Color x:Key="HeaderBg">#1A2F5F</Color>
+    <Color x:Key="Surface">#F0F6FF</Color>
+    <Color x:Key="SurfaceDark">#E8F1FF</Color>
+    
+    <!-- Solid Color Brushes -->
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="{StaticResource PrimaryDark}"/>
+    <SolidColorBrush x:Key="PrimaryLightBrush" Color="{StaticResource PrimaryLight}"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/>
     <SolidColorBrush x:Key="SidebarBrush" Color="{StaticResource SidebarBg}"/>
     <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource Surface}"/>
+    <SolidColorBrush x:Key="SurfaceDarkBrush" Color="{StaticResource SurfaceDark}"/>
+    
+    <!-- Gradient Brushes -->
+    <!-- Header Gradient: Deep Navy to Bright Blue -->
+    <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#0A1E3E" Offset="0"/>
+        <GradientStop Color="#1A3F7F" Offset="0.5"/>
+        <GradientStop Color="#0D2E5F" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <!-- Sidebar Gradient: Dark Navy to Deep Blue -->
+    <LinearGradientBrush x:Key="SidebarGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0A1E3E" Offset="0"/>
+        <GradientStop Color="#132749" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <!-- Surface Gradient: Light Blue Tints -->
+    <LinearGradientBrush x:Key="SurfaceGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#F0F6FF" Offset="0"/>
+        <GradientStop Color="#E8F1FF" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <!-- Primary Button Gradient: Vibrant Blue to Light Blue -->
+    <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0066FF" Offset="0"/>
+        <GradientStop Color="#3385FF" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <!-- Primary Button Hover Gradient: Darker Blue -->
+    <LinearGradientBrush x:Key="PrimaryHoverGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#0052CC" Offset="0"/>
+        <GradientStop Color="#0066FF" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <!-- Accent Gradient: Cyan Blue variations -->
+    <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#0066FF" Offset="0"/>
+        <GradientStop Color="#00A8FF" Offset="1"/>
+    </LinearGradientBrush>
 </ResourceDictionary>

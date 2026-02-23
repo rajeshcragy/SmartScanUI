@@ -27,7 +27,6 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -57,58 +56,27 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
                 </StackPanel>
             </Border>
 
-            <!-- Section 2: PDF Preview Image Box -->
-            <Border Grid.Column="1" Grid.Row="0" Background="White" Padding="16" CornerRadius="6" Margin="6,0,6,12" BorderBrush="#E0E0E0" BorderThickness="1">
-                <StackPanel>
-                    <TextBlock Text="📄 Scanner Preview" FontWeight="Bold" FontSize="12" Margin="0,0,0,12"/>
-                    <Border Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="4" HorizontalAlignment="Stretch" Height="380" Width="450">
-                        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Name="ActiveXScanner"  Height="380" Width="450">
+            <!-- Section 2: PDF Preview Image Box - Extended -->
+            <Border Grid.Column="1" Grid.Row="0" Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,12" BorderBrush="#E0E0E0" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Grid.Row="0" Text="📄 Scanner Preview" FontWeight="Bold" FontSize="12" Margin="0,0,0,12"/>
+                    <Border Grid.Row="1" Background="#F0F0F0" BorderBrush="#D0D0D0" BorderThickness="1" CornerRadius="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Name="ActiveXScanner">
 
                              <!--Scanner Active X control add here from background - Rajesh B-->
 
                         </Grid>
                     </Border>
-                </StackPanel>
-            </Border>
-
-            <!-- Section 3: Scanned Pages Thumbnails -->
-            <Border Grid.Column="2" Grid.Row="0" Background="White" Padding="12" CornerRadius="6" Margin="6,0,0,12" BorderBrush="#E0E0E0" BorderThickness="1">
-                <StackPanel>
-                    <TextBlock Text="📸 Scanned Pages" FontWeight="Bold" FontSize="12" Margin="0,0,0,8"/>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400">
-                        <StackPanel>
-                            <!-- Page thumbnails -->
-                            <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,0,0,6" Cursor="Hand">
-                                <StackPanel>
-                                    <Border Background="#D0D0D0" CornerRadius="2" Height="60" Margin="0,0,0,4"/>
-                                    <TextBlock Text="Page 1" FontSize="9" FontWeight="Bold"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,0,0,6" Cursor="Hand">
-                                <StackPanel>
-                                    <Border Background="#D0D0D0" CornerRadius="2" Height="60" Margin="0,0,0,4"/>
-                                    <TextBlock Text="Page 2" FontSize="9" FontWeight="Bold"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="6" Margin="0,0,0,6" Cursor="Hand">
-                                <StackPanel>
-                                    <Border Background="#D0D0D0" CornerRadius="2" Height="60" Margin="0,0,0,4"/>
-                                    <TextBlock Text="Page 3" FontSize="9" FontWeight="Bold"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="6" Cursor="Hand">
-                                <StackPanel>
-                                    <Border Background="#D0D0D0" CornerRadius="2" Height="60" Margin="0,0,0,4"/>
-                                    <TextBlock Text="Page 4" FontSize="9" FontWeight="Bold"/>
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </ScrollViewer>
-                </StackPanel>
+                </Grid>
             </Border>
 
             <!-- Scan Controls Section -->
-            <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,0" BorderBrush="#E0E0E0" BorderThickness="1">
+            <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Background="White" Padding="16" CornerRadius="6" Margin="0,0,0,0" BorderBrush="#E0E0E0" BorderThickness="1">
                 <StackPanel>
                     <Grid Margin="0,0,0,12">
                         <Grid.ColumnDefinitions>
@@ -149,7 +117,7 @@ xmlns:local="clr-namespace:SmartScanUI.ViewModels">
                             </Grid.ColumnDefinitions>
                             <StackPanel Grid.Column="0">
                                 <TextBlock Text="Scan Status" FontWeight="Bold" FontSize="11"/>
-                                <TextBlock Text="{Binding ScannerStatus}" Foreground="Gray" FontSize="10" Margin="0,4,0,0" Width="517" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding ScannerStatus}" Foreground="Gray" FontSize="15" Margin="0,4,0,4" Width="517" TextWrapping="Wrap"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="20,0,0,0">
                                 <TextBlock Text="Pages: 0" FontWeight="Bold" FontSize="11" HorizontalAlignment="Right"/>

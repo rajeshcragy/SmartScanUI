@@ -43,7 +43,7 @@ namespace SmartScanUI.Scanner
             }
             OnStatusChanged("Device opened. Configuring process type...");
 
-            status = engine.SetProcessType(4);
+            status = engine.SetProcessType(2);
             if (!string.IsNullOrEmpty(status))
             {
                 OnStatusChanged($"Failed to set process type: {status}");

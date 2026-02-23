@@ -11,14 +11,14 @@
         <vm:MainViewModel/>
     </Window.DataContext>
 
-    <Grid Background="{StaticResource SurfaceBrush}">
+    <Grid Background="{StaticResource SurfaceGradient}">
         <Grid.RowDefinitions>
             <RowDefinition Height="110"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Custom Header Bar -->
-        <Border Grid.Row="0" Background="#1e1440" Padding="20">
+        <Border Grid.Row="0" Background="{StaticResource HeaderGradient}" Padding="20">
             <Grid>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="Scanner Admin" FontSize="24" FontWeight="Bold" Foreground="White"/>
@@ -40,7 +40,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar -->
-            <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
+            <Border Grid.Column="0" Background="{StaticResource SidebarGradient}">
                 <views:SidebarView DataContext="{Binding Sidebar}"/>
             </Border>
 
@@ -50,8 +50,8 @@
                 <ContentControl DockPanel.Dock="Top" Content="{Binding CurrentWorkspace}" Margin="0,0,0,12"/>
 
                 <!-- Footer -->
-                <Border DockPanel.Dock="Bottom" Background="#EFEFEF" Padding="10" Margin="0,12,0,0">
-                    <TextBlock Text="© ACME CORPORATION" Foreground="Gray"/>
+                <Border DockPanel.Dock="Bottom" Background="{StaticResource AccentGradient}" Padding="10" Margin="0,12,0,0">
+                    <TextBlock Text="© ACME CORPORATION" Foreground="White" FontWeight="SemiBold"/>
                 </Border>
             </DockPanel>
         </Grid>
