@@ -22,7 +22,7 @@
             <Grid>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="Scanner Admin" FontSize="24" FontWeight="Bold" Foreground="White"/>
-                    <TextBlock Text="ACME CORPORATION" FontSize="14" Foreground="White" Opacity="0.9" Margin="0,4,0,0"/>
+                    <TextBlock Text="ANDHRA MAHILA SABHA" FontSize="14" Foreground="White" Opacity="0.9" Margin="0,4,0,0"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
