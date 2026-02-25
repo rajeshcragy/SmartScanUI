@@ -55,6 +55,19 @@ namespace SmartScanUI.Scanner.CZUR
         Thedeviceisoff = 19,
         Recordingorfacerecognitionisinprogress = 23
     }
+
+    internal enum BarcodeType
+    {
+        EAN8 = 8,
+        UPCE = 9,
+        UPCA = 12,
+        EAN13 = 13,
+        ISBN13 = 14,
+        Interleaved2Of5 = 25,
+        Code39 = 39,
+        QRCode = 64,
+        Code128 = 128
+    }
     
 }
 

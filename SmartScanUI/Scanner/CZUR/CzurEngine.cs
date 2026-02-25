@@ -15,7 +15,11 @@ namespace SmartScanUI.Scanner.CZUR
         public CzurEngine(AxCZUROcxLib.AxCZUROcx ScannerControl)
         {
             axCZUROcx1 = ScannerControl;
+
+
         }
+
+        #region "Scanner Methods"
 
         public string GetLicenseInfo()
         {
@@ -26,7 +30,7 @@ namespace SmartScanUI.Scanner.CZUR
         {
             string strLicense = GetLicenseInfo();
             var status = (CzurInitializationStatus)axCZUROcx1.CZUR_Initialize(strLicense);
-            if (status == CzurInitializationStatus.Success || status==CzurInitializationStatus.AlreadyInitialized)
+            if (status == CzurInitializationStatus.Success || status == CzurInitializationStatus.AlreadyInitialized)
             {
                 return String.Empty;
             }
@@ -57,7 +61,7 @@ namespace SmartScanUI.Scanner.CZUR
         /// <param name="hp">The horizontal percentage of display area of secondary camera by the CZUROcx window, 1~100 </param>
         /// <param name="vp">he vertical percentage of display area of secondary camera by the CZUROcx window, 1~100 </param>
         /// <returns>status of the Opendevice form enum-CzurOpenDeviceStatus</returns>
-        public string OpenDevice(int index, int width, int height,int hp,int vp)
+        public string OpenDevice(int index, int width, int height, int hp, int vp)
         {
             var status = (CzurOpenDeviceStatus)axCZUROcx1.CZUR_OpenDevice(index, width, height, hp, vp);
             return status == CzurOpenDeviceStatus.Success ? String.Empty : $"Failed to open device with status: {status}";
@@ -77,16 +81,20 @@ namespace SmartScanUI.Scanner.CZUR
 
         public string GetDeviceModel()
         {
-            var deviceModel =axCZUROcx1.CZUR_GetDeviceModel();
+            var deviceModel = axCZUROcx1.CZUR_GetDeviceModel();
             return deviceModel;
         }
 
         public string GetDeviceId()
         {
-            var deviceId=axCZUROcx1.CZUR_GetDeviceID();
+            var deviceId = axCZUROcx1.CZUR_GetDeviceID();
             return deviceId;
         }
 
+        #endregion
 
+        #region "Scanner Events"
+
+        #endregion
     }
 }
