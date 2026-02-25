@@ -65,8 +65,8 @@ namespace SmartScanUI.Scanner.CZUR
 
         public string CloseDevice(int index)
         {
-            var status=axCZUROcx1.CZUR_CloseDevice(index);
-            return status;
+            var status = (CzurCloseDeviceStatus)axCZUROcx1.CZUR_CloseDevice(index);
+            return status == CzurCloseDeviceStatus.Success ? String.Empty : $"Failed to close device with status: {status}";
         }
 
         public string SetProcessType(int type)

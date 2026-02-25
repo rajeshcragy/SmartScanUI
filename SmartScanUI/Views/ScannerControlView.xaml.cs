@@ -59,9 +59,9 @@ namespace SmartScanUI.Views
             });
         }
 
-        private void StopScanButton_Click(object sender, RoutedEventArgs e)
+        private void ResetScanButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Stop Scan button clicked!", "Stop Scan", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Reset Scan button clicked!", "Reset Scan", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
