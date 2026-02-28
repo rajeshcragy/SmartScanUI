@@ -139,6 +139,13 @@ namespace SmartScanUI.Scanner.CZUR
             return errorCode;
         }
 
+        public void Add_Thumbnail(string imagefile)
+        {
+            axCZUROcx1.CZUR_Thumbnail_Add(imagefile);
+            Logger.Info("Thumbnail event: {0}", imagefile);
+            OnThumbnailEvent(new CzurThumbnailEventArgs { Message = imagefile });
+        }
+
         private string GetGrabImageErrorMessage(int errorCode)
         {
             switch (errorCode)

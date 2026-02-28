@@ -218,6 +218,7 @@ namespace SmartScanUI.Scanner
                 {
                     OnStatusChanged("Image captured successfully. Processing...");
                     Logger.Info("Image captured successfully: {0}", imageFilePath);
+                    engine.Add_Thumbnail(imageFilePath.Replace("scan.jpg","scan_left.jpg"));
                 }
                 else
                 {

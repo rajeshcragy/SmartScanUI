@@ -25,6 +25,16 @@ namespace SmartScanUI.Views
 
             _viewModel = new SessionImageListViewModel();
             this.DataContext = _viewModel;
+            
+            // Initialize button states when the view loads
+            this.Loaded += ScannerControlView_Loaded;
+        }
+
+        private void ScannerControlView_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Set initial button states: Start Scan enabled, Reset Scan disabled
+            StartScanButton.IsEnabled = true;
+            ResetScanButton.IsEnabled = false;
         }
 
         private void LoadActiveXControl()
@@ -49,6 +59,10 @@ namespace SmartScanUI.Views
             _scannerHelper.StatusChanged += ScannerHelper_StatusChanged;
             _scannerHelper.ImageEvent += ScannerHelper_ImageEvent;
             _scannerHelper.Initialize();
+            
+            // Update button states: disable Start Scan, enable Reset Scan
+            StartScanButton.IsEnabled = false;
+            ResetScanButton.IsEnabled = true;
         }
 
         private void ScannerHelper_StatusChanged(object sender, SmartScanUI.Scanner.ScannerHelper.StatusChangedEventArgs e)
@@ -92,6 +106,38 @@ namespace SmartScanUI.Views
             {
                 MessageBox.Show("Scanner is not initialized.", "Reset Scan", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+            
+            // Update button states: disable Reset Scan, enable Start Scan
+            ResetScanButton.IsEnabled = false;
+            StartScanButton.IsEnabled = true;
+        }
+
+        private void AddNewSessionButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Create a new session
+            CreateNewSession();
+        }
+
+        private void UserControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            // Check if F5 key is pressed
+            if (e.Key == System.Windows.Input.Key.F5)
+            {
+                CreateNewSession();
+                e.Handled = true; // Mark the event as handled to prevent default F5 behavior
+            }
+        }
+
+        private void CreateNewSession()
+        {
+            // Create a new session
+            MessageBox.Show("New Session Created!", "New Session", MessageBoxButton.OK, MessageBoxImage.Information);
+            
+            // You can add your custom logic here to create a new scanning session
+            System.Diagnostics.Debug.WriteLine("New Session Started via Button Click or F5 Key Press");
+            
+            // Example: Add a new session to the view model
+            // _viewModel.AddNewSession();
         }
     }
 }
