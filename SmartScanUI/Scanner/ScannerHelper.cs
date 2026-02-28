@@ -54,13 +54,21 @@ namespace SmartScanUI.Scanner
             // Play beep sound based on image capture success
             if (e.EventStatus == CZUR.CzurImageEventStatus.Success)
             {
-                SystemSounds.Asterisk.Play(); // Success beep - pleasant "ding" sound
+                // Success beep - multiple high frequency beeps for longer sound
+                Console.Beep(1000, 400); // 1000 Hz for 400ms
+                //System.Threading.Thread.Sleep(100);
+                //Console.Beep(1200, 400); // 1200 Hz for 400ms - ascending tone
                 Logger.Info("Image event successful - Success beep played");
+                OnStatusChanged("Scanned page Successfully, Ready to Scan");
             }
             else
             {
-                SystemSounds.Hand.Play(); // Failed beep - error/warning sound
+                // Failed beep - longer low frequency beeps
+                Console.Beep(600, 500);  // 600 Hz for 500ms
+                //System.Threading.Thread.Sleep(100);
+                Console.Beep(400, 500);  // 400 Hz for 500ms - descending tone
                 Logger.Warn("Image event failed with status: {0} - Failed beep played", e.EventStatus);
+                OnStatusChanged("Scanned page Failed, Please check");
             }
         }
 
@@ -76,7 +84,7 @@ namespace SmartScanUI.Scanner
             {
                 Logger.Info("Grab event received: {0}", e.Description);
 
-                GrabImage(0, "C:\\ScannedImages\\scan.jpg", 75, 0, 0, 1, 1, 1, 85, 0);
+                GrabImage(0, "C:\\ScannedImages\\scan.jpg", 75, 0, 0, 1, 0, 1, 65, 0);
             }
             else
             {
