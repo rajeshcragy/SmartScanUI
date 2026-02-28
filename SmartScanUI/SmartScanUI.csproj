@@ -74,6 +74,7 @@
     <Compile Include="Helpers\BaseViewModels.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\SessionDataService.cs" />
+    <Compile Include="Models\MasterSettingsModel.cs" />
     <Compile Include="Models\ScannerModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Scanner\CZUR\CzurEnums.cs" />
@@ -173,6 +174,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="AppSettings\Users\Master.Json" />
     <None Include="AppSettings\Users\EMP2705\Scans\Scans.Json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

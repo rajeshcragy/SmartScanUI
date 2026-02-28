@@ -1,0 +1,51 @@
+{
+  "Collage": [
+    {
+      "Name": "Andhara Mahila Sabha",
+      "Title": "Arts & Science college for women",
+      "Address1": "Hi Tech City",
+      "Address2": "Kondapur",
+      "City": "Hyderabad",
+      "State": "Telangana",
+      "Pincode": "500081",
+      "Country": "India",
+      "Code": "AMS-0001",
+      "IsActive": 1
+    }
+  ],
+  "Scanner": [
+    {
+      "Name": "CZUR",
+      "Model": "Model MZ",
+      "DriverVersion": "1.0",
+      "CameraIndex": 0,
+      "IsActive": 1,
+      "Width": 1536,
+      "Height": 1152,
+      "HP": 50,
+      "VP": 50,
+      "ColorMode": 0,
+      "DPI": 200,
+      "Rotation": 0,
+      "AutoAdjust": 1,
+      "BarCodeRecognition": 1,
+      "BlankPageDetection": 1,
+      "JpgQuality": 85,
+      "Compression": 0,
+      "ProcessType": 2
+    }
+  ],
+  "Routes": [
+    {
+      "Name": "UserDetails",
+      "TokenURI": "https://genesis.com/getuserToken",
+      "Creditntials": "",
+      "Method": "GET",
+      "Headers": "",
+      "URI": "https://genisis.com/getuserdetails"
+    }
+  ],
+  "UserDetailsPath": "C:\\users\\u783840\\AppData\\Roaming\\SmartScanUI\\",
+  "ScansPath": "C:\\users\\u783840\\AppData\\Roaming\\SmartScanUI\\"
+}
+

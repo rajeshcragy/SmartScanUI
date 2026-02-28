@@ -56,8 +56,6 @@ namespace SmartScanUI.Scanner
             {
                 // Success beep - multiple high frequency beeps for longer sound
                 Console.Beep(1000, 400); // 1000 Hz for 400ms
-                //System.Threading.Thread.Sleep(100);
-                //Console.Beep(1200, 400); // 1200 Hz for 400ms - ascending tone
                 Logger.Info("Image event successful - Success beep played");
                 OnStatusChanged("Scanned page Successfully, Ready to Scan");
             }
@@ -65,7 +63,6 @@ namespace SmartScanUI.Scanner
             {
                 // Failed beep - longer low frequency beeps
                 Console.Beep(600, 500);  // 600 Hz for 500ms
-                //System.Threading.Thread.Sleep(100);
                 Console.Beep(400, 500);  // 400 Hz for 500ms - descending tone
                 Logger.Warn("Image event failed with status: {0} - Failed beep played", e.EventStatus);
                 OnStatusChanged("Scanned page Failed, Please check");

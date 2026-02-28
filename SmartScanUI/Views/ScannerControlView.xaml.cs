@@ -7,16 +7,23 @@ using System.Windows;
 using System.Windows.Controls;
 using SmartScanUI.ViewModels;
 using SmartScanUI.Scanner;
+using SmartScanUI.Models;
+using Newtonsoft.Json;
+using NLog;
 
 namespace SmartScanUI.Views
 {
 
     public partial class ScannerControlView : UserControl
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        
         private SessionImageListViewModel _viewModel;
         public AxCZUROcxLib.AxCZUROcx axCZUROcx1;
         private ScannerHelper _scannerHelper;
 
+        private MasterSettingsModel MasterSettingsModel;
+        
         public ScannerControlView()
         {
             InitializeComponent();
@@ -26,8 +33,79 @@ namespace SmartScanUI.Views
             _viewModel = new SessionImageListViewModel();
             this.DataContext = _viewModel;
             
+            // Load Master Settings from JSON file
+            LoadMasterSettings();
+            
             // Initialize button states when the view loads
             this.Loaded += ScannerControlView_Loaded;
+        }
+
+        /// <summary>
+        /// Loads the Master Settings from the JSON configuration file
+        /// </summary>
+        private void LoadMasterSettings()
+        {
+            try
+            {
+                // Get the application startup path
+                string appStartupPath = AppDomain.CurrentDomain.BaseDirectory;
+                
+                // Build the full path to Master.json
+                string masterSettingsPath = System.IO.Path.Combine(appStartupPath, @"AppSettings\Users\Master.json");
+                
+                // Check if file exists
+                if (!System.IO.File.Exists(masterSettingsPath))
+                {
+                    Logger.Error("Master.json file not found at path: {0}", masterSettingsPath);
+                    MessageBox.Show($"Configuration file not found at:\n{masterSettingsPath}", 
+                        "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                
+                // Read and deserialize the JSON file
+                string jsonContent = System.IO.File.ReadAllText(masterSettingsPath);
+                this.MasterSettingsModel = JsonConvert.DeserializeObject<MasterSettingsModel>(jsonContent);
+                
+                if (this.MasterSettingsModel != null)
+                {
+                    Logger.Info("Master Settings loaded successfully from: {0}", masterSettingsPath);
+                    
+                    // Log the loaded settings
+                    if (this.MasterSettingsModel.Collage != null && this.MasterSettingsModel.Collage.Count > 0)
+                    {
+                        Logger.Info("Loaded {0} collage settings", this.MasterSettingsModel.Collage.Count);
+                    }
+                    
+                    if (this.MasterSettingsModel.Scanner != null && this.MasterSettingsModel.Scanner.Count > 0)
+                    {
+                        Logger.Info("Loaded {0} scanner settings", this.MasterSettingsModel.Scanner.Count);
+                    }
+                }
+                else
+                {
+                    Logger.Warn("Master Settings deserialized but object is null");
+                    MessageBox.Show("Failed to parse configuration file. Object is null.", 
+                        "Configuration Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+                Logger.Error(ex, "Master.json file not found");
+                MessageBox.Show($"Configuration file not found:\n{ex.Message}", 
+                    "File Not Found", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (JsonException ex)
+            {
+                Logger.Error(ex, "Error parsing Master.json file");
+                MessageBox.Show($"Error parsing configuration file:\n{ex.Message}", 
+                    "JSON Parse Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Unexpected error loading Master Settings");
+                MessageBox.Show($"Unexpected error loading configuration:\n{ex.Message}", 
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void ScannerControlView_Loaded(object sender, RoutedEventArgs e)
