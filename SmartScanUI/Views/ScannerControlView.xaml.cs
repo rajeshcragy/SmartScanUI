@@ -133,7 +133,7 @@ namespace SmartScanUI.Views
 
         private void StartScanButton_Click(object sender, RoutedEventArgs e)
         {
-            _scannerHelper = new ScannerHelper(axCZUROcx1);
+            _scannerHelper = new ScannerHelper(axCZUROcx1, MasterSettingsModel);
             _scannerHelper.StatusChanged += ScannerHelper_StatusChanged;
             _scannerHelper.ImageEvent += ScannerHelper_ImageEvent;
             _scannerHelper.Initialize();

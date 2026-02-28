@@ -25,12 +25,12 @@
       "HP": 50,
       "VP": 50,
       "ColorMode": 0,
-      "DPI": 200,
+      "DPI": 75,
       "Rotation": 0,
       "AutoAdjust": 1,
       "BarCodeRecognition": 1,
       "BlankPageDetection": 1,
-      "JpgQuality": 85,
+      "JpgQuality": 65,
       "Compression": 0,
       "ProcessType": 2
     }

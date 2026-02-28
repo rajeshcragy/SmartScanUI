@@ -11,17 +11,7 @@ PreviewKeyDown="UserControl_PreviewKeyDown">
 
         <!-- Top Scrollable Section: Device Information -->
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" MaxHeight="300" HorizontalScrollBarVisibility="Auto">
-            <StackPanel>
-                <!-- Three Sections Displayed Horizontally -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                </Grid>
-            </StackPanel>
+            
         </ScrollViewer>
 
         <!-- Main Scanning Interface -->
@@ -129,7 +119,7 @@ PreviewKeyDown="UserControl_PreviewKeyDown">
                     </Grid>
 
                     <!-- Scan Status Info -->
-                    <Border Background="#F5F5F5" Padding="5" CornerRadius="4">
+                    <Border Background="#F5F5F5" Padding="5" CornerRadius="4" Margin="0,0,0,12">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -144,6 +134,140 @@ PreviewKeyDown="UserControl_PreviewKeyDown">
                                 <TextBlock Text="Size: 0 MB" Foreground="Gray" FontSize="10" HorizontalAlignment="Right" Margin="0,2,0,0"/>
                             </StackPanel>
                         </Grid>
+                    </Border>
+
+                    <!-- Scanner Device Details Section -->
+                    <Border Background="#F0F8FF" Padding="10" CornerRadius="4" BorderBrush="#B0E0E6" BorderThickness="1">
+                        <StackPanel>
+                            <!-- Header -->
+                            <TextBlock Text="🖨️ Scanner Device Details" FontWeight="Bold" FontSize="10" Margin="0,0,0,8" Foreground="#006699"/>
+                            
+                            <!-- Columns Layout -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Column 1: Device Information -->
+                                <Border Grid.Column="0" Background="White" Padding="8" CornerRadius="3" BorderBrush="#D0E8F2" BorderThickness="1" Margin="0,0,4,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Device Info" FontSize="8" FontWeight="Bold" Foreground="#006699" Margin="0,0,0,6"/>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Device:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="CZUR" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Model:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="Model MZ" FontSize="8" Foreground="#555555" TextTrimming="CharacterEllipsis"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Column 2: Resolution -->
+                                <Border Grid.Column="1" Background="White" Padding="8" CornerRadius="3" BorderBrush="#D0E8F2" BorderThickness="1" Margin="0,0,4,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Resolution" FontSize="8" FontWeight="Bold" Foreground="#006699" Margin="0,0,0,6"/>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Width:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="1536 px" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Height:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="1152 px" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="DPI:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="200 DPI" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Column 3: Quality & Processing -->
+                                <Border Grid.Column="2" Background="White" Padding="8" CornerRadius="3" BorderBrush="#D0E8F2" BorderThickness="1" Margin="0,0,4,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Quality" FontSize="8" FontWeight="Bold" Foreground="#006699" Margin="0,0,0,6"/>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Color:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="Auto" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="JPG:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="85%" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Format:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="JPG" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Column 4: Features & Version -->
+                                <Border Grid.Column="3" Background="White" Padding="8" CornerRadius="3" BorderBrush="#D0E8F2" BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock Text="Features" FontSize="8" FontWeight="Bold" Foreground="#006699" Margin="0,0,0,6"/>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Barcode:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="✓ On" FontSize="8" Foreground="#28A745" FontWeight="Bold"/>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="BlankDet:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="✓ On" FontSize="8" Foreground="#28A745" FontWeight="Bold"/>
+                                        </Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Driver:" FontSize="7" FontWeight="Bold" Foreground="#333333" Width="35"/>
+                                            <TextBlock Grid.Column="1" Text="v1.0" FontSize="8" Foreground="#555555"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
                     </Border>
                 </StackPanel>
             </Border>

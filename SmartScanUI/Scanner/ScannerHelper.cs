@@ -1,6 +1,7 @@
 ﻿using AxCZUROcxLib;
 using Newtonsoft.Json;
 using NLog;
+using SmartScanUI.Models;
 using SmartScanUI.Scanner.CZUR;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,12 @@ namespace SmartScanUI.Scanner
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         
         CZUR.CzurEngine engine;
+        MasterSettingsModel masterSettingsModel;
+        ScannerSettingsModel activeScannerSettings;
+        CollageModel activeCollageSettings;
+        String activeUserDetailsPath;
+        String activeScanningPath;
+
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
         public event EventHandler<CZUR.CzurEngine.CzurImageEventArgs> ImageEvent;
@@ -29,10 +36,15 @@ namespace SmartScanUI.Scanner
         public event EventHandler<CZUR.CzurEngine.CzurCvrEventArgs> CvrEvent;
         public event EventHandler<CZUR.CzurEngine.CzurThumbnailEventArgs> ThumbnailEvent;
 
-        public ScannerHelper(AxCZUROcxLib.AxCZUROcx activeXScanner)
+        public ScannerHelper(AxCZUROcxLib.AxCZUROcx activeXScanner, MasterSettingsModel masterSettingsModel)
         {
-            engine = new CZUR.CzurEngine(activeXScanner);
-            
+            this.engine = new CZUR.CzurEngine(activeXScanner);
+            this.masterSettingsModel = masterSettingsModel;
+            this.activeCollageSettings=masterSettingsModel.Collage.Where(CollageModel => CollageModel.IsActive == 1).FirstOrDefault();
+            this.activeScannerSettings=masterSettingsModel.Scanner.Where(ScannerSettingsModel => ScannerSettingsModel.IsActive == 1).FirstOrDefault();
+            this.activeUserDetailsPath = masterSettingsModel.UserDetailsPath;
+            this.activeScanningPath = masterSettingsModel.ScansPath;
+
             // Subscribe to all engine events
             engine.ImageEvent += Engine_ImageEvent;
             engine.HttpEvent += Engine_HttpEvent;
@@ -81,7 +93,12 @@ namespace SmartScanUI.Scanner
             {
                 Logger.Info("Grab event received: {0}", e.Description);
 
-                GrabImage(0, "C:\\ScannedImages\\scan.jpg", 75, 0, 0, 1, 0, 1, 65, 0);
+                GrabImage(
+                    activeScannerSettings.CameraIndex,
+                    "C:\\ScannedImages\\scan.jpg",
+                    activeScannerSettings.DPI, activeScannerSettings.ColorMode, activeScannerSettings.Rotation,
+                    activeScannerSettings.AutoAdjust,activeScannerSettings.BarCodeRecognition,activeScannerSettings.BlankPageDetection,
+                    activeScannerSettings.JpgQuality, activeScannerSettings.Compression);
             }
             else
             {
@@ -146,7 +163,8 @@ namespace SmartScanUI.Scanner
             OnStatusChanged("Scanner initialized. Opening device...");
             Logger.Info("Scanner initialized. Opening device...");
 
-            status = engine.OpenDevice(0, 1536, 1152, 50, 50);
+            status = engine.OpenDevice(activeScannerSettings.CameraIndex, activeScannerSettings.Width,
+                                        activeScannerSettings.Height, activeScannerSettings.HP, activeScannerSettings.VP);
             if (!string.IsNullOrEmpty(status))
             {
                 OnStatusChanged($"Failed to open device: {status}");
@@ -156,7 +174,7 @@ namespace SmartScanUI.Scanner
             OnStatusChanged("Device opened. Configuring process type...");
             Logger.Info("Device opened. Configuring process type...");
 
-            status = engine.SetProcessType(4);
+            status = engine.SetProcessType(activeScannerSettings.ProcessType);
             if (!string.IsNullOrEmpty(status))
             {
                 OnStatusChanged($"Failed to set process type: {status}");
