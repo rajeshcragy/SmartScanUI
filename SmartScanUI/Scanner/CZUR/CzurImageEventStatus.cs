@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartScanUI.Scanner.CZUR
 {
-    internal enum CzurImageEventStatus
+    public enum CzurImageEventStatus
     {
         Success = 0,
         ImageProcessingError = 1,

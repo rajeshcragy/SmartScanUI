@@ -1,21 +1,36 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Media.Media3D;
 
 namespace SmartScanUI.Scanner.CZUR
 {
     public class CzurEngine
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         private AxCZUROcxLib.AxCZUROcx axCZUROcx1;
+
         public CzurEngine(AxCZUROcxLib.AxCZUROcx ScannerControl)
         {
             axCZUROcx1 = ScannerControl;
-
+            axCZUROcx1.CZUR_EVENT_IMAGE += CZUROCX_EVENT_IMAGE;
+            axCZUROcx1.CZUR_EVENT_PDF += CZUROCX_EVENT_PDF;
+            axCZUROcx1.CZUR_EVENT_HTTP += CZUROCX_EVENT_HTTP;
+            axCZUROcx1.CZUR_EVENT_RECORD += CZUROCX_EVENT_RECORD;
+            //axCZUROcx1.CZUR_EVENT_BASE64 += CZUROCX_EVENT_BASE64;
+            axCZUROcx1.CZUR_EVENT_GRAB += CZUROCX_EVENT_GRAB;
+            axCZUROcx1.CZUR_EVENT_THUMBNAIL += CZUROCX_EVENT_THUMBNAIL;
+            axCZUROcx1.CZUR_EVENT_OCR += CZUROCX_EVENT_OCR;
+            axCZUROcx1.CZUR_EVENT_MULTIOBJ += CZUROCX_EVENT_MULTIOBJ;
+            axCZUROcx1.CZUR_EVENT_CVR += CZUROCX_EVENT_CVR;
+            axCZUROcx1.CZUR_EVENT_CFM += CZUROCX_EVENT_CFM;
 
         }
 
@@ -91,10 +106,553 @@ namespace SmartScanUI.Scanner.CZUR
             return deviceId;
         }
 
-        #endregion
+        /// <summary>
+        /// Grab image from the scanner device
+        /// </summary>
+        /// <param name="index">Camera index</param>
+        /// <param name="imageFile">Output image file path</param>
+        /// <param name="dpi">DPI (dots per inch) - typical values: 150, 200, 300</param>
+        /// <param name="colorMode">Color mode: 0=Auto, 1=B&W, 2=Gray, 3=Color</param>
+        /// <param name="rotation">Rotation: 0=No rotation, 90, 180, 270</param>
+        /// <param name="autoAdjust">Auto adjust: 0=Off, 1=On</param>
+        /// <param name="barCodeRecognition">Barcode recognition: 0=Off, 1=On</param>
+        /// <param name="blankPageDetection">Blank page detection: 0=Off, 1=On</param>
+        /// <param name="jpgQuality">JPG quality: 1-100</param>
+        /// <param name="compression">Compression type: 0=JPG, 1=PNG, 2=TIFF</param>
+        /// <returns>Error code (0=Success)</returns>
+        public int GrabImage(int index, string imageFile, int dpi, int colorMode, int rotation, 
+            int autoAdjust, int barCodeRecognition, int blankPageDetection, int jpgQuality, int compression)
+        {
+            int errorCode = axCZUROcx1.CZUR_GrabImage(index, imageFile, dpi, colorMode, rotation, 
+                autoAdjust, barCodeRecognition, blankPageDetection, jpgQuality, compression);
+            
+            string errorMessage = GetGrabImageErrorMessage(errorCode);
+            if (errorCode == 0)
+            {
+                Logger.Info("Image grabbed successfully. Processing image: {0}", imageFile);
+            }
+            else
+            {
+                Logger.Error("Grab image failed with error code {0}: {1}", errorCode, errorMessage);
+            }
+
+            return errorCode;
+        }
+
+        private string GetGrabImageErrorMessage(int errorCode)
+        {
+            switch (errorCode)
+            {
+                case 0:
+                    return "Photo taken successfully. Image is being processed.";
+                case 1:
+                    return "Error occurred while taking a photo";
+                case 2:
+                    return "CZUROcx environment is not initialized";
+                case 4:
+                    return "Image file name is null";
+                case 6:
+                    return "Invalid JPG compression quality";
+                case 7:
+                    return "System is out of memory";
+                case 8:
+                    return "Invalid camera serial number";
+                case 9:
+                    return "Invalid color mode";
+                case 11:
+                    return "Invalid image file format";
+                case 13:
+                    return "Invalid TIFF compression";
+                case 18:
+                    return "Device does not support this operation";
+                case 19:
+                    return "Device is not turned on";
+                case 32:
+                    return "Recording is in progress. Cannot take pictures";
+                case 58:
+                    return "A next picture can be taken only after the laser line flashes";
+                default:
+                    return $"Unknown error code: {errorCode}";
+            }
+        }
 
         #region "Scanner Events"
 
+        #region "Event Args Classes"
+        public class BarCodeItem
+        {
+            public string barCode { get; set; }
+            public int type { get; set; }
+        }
+
+        public class CzurImageEventArgs : EventArgs
+        {
+            public CzurImageEventStatus EventStatus { get; set; }
+            public List<BarCodeItem> BarCodeItems { get; set; }
+            public string ErrorMessage { get; set; }
+        }
+
+        public class CzurHttpEventArgs : EventArgs
+        {
+            public int Error { get; set; }
+            public string Message { get; set; }
+        }
+
+        public class CzurGrabEventArgs : EventArgs
+        {
+            public int Type { get; set; } // 0: Page turning, 1: Camera button
+            public string Description { get; set; }
+        }
+
+        public class CzurMultiObjEventArgs : EventArgs
+        {
+            public int Count { get; set; }
+            public int Number { get; set; }
+            public string Path { get; set; }
+            public string Prefix { get; set; }
+            public string ImageFile { get; set; }
+            public bool Success { get; set; }
+        }
+
+        public class CzurOcrEventArgs : EventArgs
+        {
+            public int Error { get; set; }
+            public int Type { get; set; } // 0: Driver's License, 1: Vehicle, 2: Passport, 3: Travel Permit, 4: Document
+            public string Result { get; set; }
+            public string ErrorDescription { get; set; }
+        }
+
+        public class CzurPdfEventArgs : EventArgs
+        {
+            public int Error { get; set; }
+            public int Count { get; set; }
+            public string FileName { get; set; }
+            public bool IsComplete { get; set; }
+        }
+
+        public class CzurRecordEventArgs : EventArgs
+        {
+            public int Second { get; set; }
+            public long Size { get; set; }
+        }
+
+        public class CzurCfmEventArgs : EventArgs
+        {
+            public int Type { get; set; } // 1: Facial comparison
+            public int Error { get; set; }
+            public string ErrorDescription { get; set; }
+        }
+
+        public class CzurCvrEventArgs : EventArgs
+        {
+            public int Error { get; set; }
+            public int Type { get; set; } // 0: ID card info, 1: Combined front/back
+            public string Result { get; set; }
+            public string ErrorDescription { get; set; }
+        }
+
+        public class CzurThumbnailEventArgs : EventArgs
+        {
+            public string Message { get; set; }
+        }
+        #endregion
+
+        #region "Public Events"
+        public event EventHandler<CzurImageEventArgs> ImageEvent;
+        public event EventHandler<CzurHttpEventArgs> HttpEvent;
+        public event EventHandler<CzurGrabEventArgs> GrabEvent;
+        public event EventHandler<CzurMultiObjEventArgs> MultiObjEvent;
+        public event EventHandler<CzurOcrEventArgs> OcrEvent;
+        public event EventHandler<CzurPdfEventArgs> PdfEvent;
+        public event EventHandler<CzurRecordEventArgs> RecordEvent;
+        public event EventHandler<CzurCfmEventArgs> CfmEvent;
+        public event EventHandler<CzurCvrEventArgs> CvrEvent;
+        public event EventHandler<CzurThumbnailEventArgs> ThumbnailEvent;
+        #endregion
+
+        #region "Event Handlers"
+        protected virtual void OnImageEvent(CzurImageEventArgs e)
+        {
+            ImageEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnHttpEvent(CzurHttpEventArgs e)
+        {
+            HttpEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnGrabEvent(CzurGrabEventArgs e)
+        {
+            GrabEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnMultiObjEvent(CzurMultiObjEventArgs e)
+        {
+            MultiObjEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnOcrEvent(CzurOcrEventArgs e)
+        {
+            OcrEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnPdfEvent(CzurPdfEventArgs e)
+        {
+            PdfEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnRecordEvent(CzurRecordEventArgs e)
+        {
+            RecordEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnCfmEvent(CzurCfmEventArgs e)
+        {
+            CfmEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnCvrEvent(CzurCvrEventArgs e)
+        {
+            CvrEvent?.Invoke(this, e);
+        }
+
+        protected virtual void OnThumbnailEvent(CzurThumbnailEventArgs e)
+        {
+            ThumbnailEvent?.Invoke(this, e);
+        }
+        #endregion
+
+        private void CZUROCX_EVENT_HTTP(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_HTTPEvent e)
+        {
+            var eventArgs = new CzurHttpEventArgs { Error = e.error, Message = e.bsrMessage };
+
+            if (0 == e.error)
+            {
+                Logger.Info("HTTP upload succeeded: {0}", e.bsrMessage);
+            }
+            else
+            {
+                Logger.Error("HTTP upload failed with error code {0}: {1}", e.error, e.bsrMessage);
+            }
+
+            OnHttpEvent(eventArgs);
+        }
+
+        private void CZUROCX_EVENT_GRAB(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_GRABEvent e)
+        {
+            string description = string.Empty;
+            switch (e.type)
+            {
+                case 0:
+                    description = "Page turning action detected";
+                    break;
+                case 1:
+                    description = "Camera button press detected";
+                    break;
+            }
+
+            Logger.Debug("Grab Event: {0}", description);
+            var eventArgs = new CzurGrabEventArgs { Type = e.type, Description = description };
+            OnGrabEvent(eventArgs);
+        }
+
+        private void CZUROCX_EVENT_MULTIOBJ(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_MULTIOBJEvent e)
+        {
+            var eventArgs = new CzurMultiObjEventArgs
+            {
+                Count = e.count,
+                Number = e.number,
+                Path = e.bsrPath,
+                Prefix = e.bsrPrefix,
+                ImageFile = e.bsrImage,
+                Success = e.count > 0
+            };
+
+            if (e.count > 0)
+            {
+                Logger.Info("Multi-object processing: {0} targets detected at {1}", e.count, e.bsrPath);
+                for (int i = 1; i <= e.count; i++)
+                {
+                    int index = e.number + i - 1;
+                    Logger.Debug("Target image {0}: {1}\\{2}{3}.jpg", i, e.bsrPath, e.bsrPrefix, index);
+                }
+            }
+            else
+            {
+                Logger.Error("Multi-target cropping failed for image: {0}", e.bsrImage);
+            }
+
+            OnMultiObjEvent(eventArgs);
+        }
+
+        private void CZUROCX_EVENT_OCR(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_OCREvent e)
+        {
+            string errorDescription = string.Empty;
+
+            switch (e.error)
+            {
+                case 0:
+                    {
+                        string docType = GetOcrDocumentType(e.type);
+                        Logger.Info("OCR recognition successful for {0}: {1}", docType, e.bsrResult);
+                    }
+                    break;
+                case 1:
+                    errorDescription = "OCR recognition error";
+                    Logger.Error(errorDescription);
+                    break;
+                case 12:
+                    errorDescription = "The recognized image file does not exist";
+                    Logger.Error(errorDescription);
+                    break;
+                case 36:
+                    errorDescription = "The current user's selection is not enough, causing OCR failure";
+                    Logger.Error(errorDescription);
+                    break;
+                default:
+                    errorDescription = $"OCR error code {e.error}";
+                    Logger.Error(errorDescription);
+                    break;
+            }
+
+            var eventArgs = new CzurOcrEventArgs
+            {
+                Error = e.error,
+                Type = e.type,
+                Result = e.bsrResult,
+                ErrorDescription = errorDescription
+            };
+
+            OnOcrEvent(eventArgs);
+        }
+
+        private string GetOcrDocumentType(int type)
+        {
+            switch (type)
+            {
+                case 0:
+                    return "Driver's License";
+                case 1:
+                    return "Vehicle License";
+                case 2:
+                    return "Passport";
+                case 3:
+                    return "Hong Kong/Macau Travel Permit";
+                case 4:
+                    return "Document";
+                default:
+                    return $"Unknown Type {type}";
+            }
+        }
+
+        private void CZUROCX_EVENT_PDF(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_PDFEvent e)
+        {
+            bool isComplete = (0 == e.error && e.bsrFileName == "");
+            
+            var eventArgs = new CzurPdfEventArgs
+            {
+                Error = e.error,
+                Count = e.count,
+                FileName = e.bsrFileName,
+                IsComplete = isComplete
+            };
+
+            if (isComplete)
+            {
+                Logger.Info("PDF synthesis complete with {0} images", e.count);
+            }
+            else
+            {
+                if (0 != e.error)
+                {
+                    Logger.Error("PDF synthesis failed for image {0} with error code {1}", e.bsrFileName, e.error);
+                }
+                else
+                {
+                    Logger.Info("PDF synthesis in progress: Image {0} of {1} ({2})", e.count, e.count, e.bsrFileName);
+                }
+            }
+
+            OnPdfEvent(eventArgs);
+        }
+
+        private void CZUROCX_EVENT_RECORD(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_RECORDEvent e)
+        {
+            Logger.Debug("Video recording progress - Duration: {0}s, Size: {1} bytes", e.second, e.size);
+
+            var eventArgs = new CzurRecordEventArgs { Second = (int)e.second, Size = e.size };
+            OnRecordEvent(eventArgs);
+        }
+
+        private void CZUROCX_EVENT_CFM(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_CFMEvent e)
+        {
+            string errorDescription = string.Empty;
+
+            if (1 == e.type)
+            {
+                switch (e.error)
+                {
+                    case 0:
+                        Logger.Info("Facial comparison successful");
+                        break;
+                    case 1:
+                        errorDescription = "Facial recognition encountered an abnormal error during comparison";
+                        Logger.Error(errorDescription);
+                        break;
+                    case 48:
+                        errorDescription = "Authorization expired";
+                        Logger.Error(errorDescription);
+                        break;
+                    case 49:
+                        errorDescription = "No faces detected in comparison images";
+                        Logger.Error(errorDescription);
+                        break;
+                    case 50:
+                        errorDescription = "Failed to extract facial information from comparison images";
+                        Logger.Error(errorDescription);
+                        break;
+                    default:
+                        errorDescription = $"Facial comparison error code {e.error}";
+                        Logger.Error(errorDescription);
+                        break;
+                }
+            }
+
+            var eventArgs = new CzurCfmEventArgs
+            {
+                Type = e.type,
+                Error = e.error,
+                ErrorDescription = errorDescription
+            };
+
+            OnCfmEvent(eventArgs);
+        }
+
+        private void CZUROCX_EVENT_CVR(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_CVREvent e)
+        {
+            string errorDescription = string.Empty;
+
+            switch (e.error)
+            {
+                case 0:
+                    {
+                        if (0 == e.type)
+                        {
+                            Logger.Info("ID card information extracted: {0}", e.bsrResult);
+                        }
+                        else
+                        {
+                            Logger.Info("Front and back sides combined successfully: {0}", e.bsrResult);
+                        }
+                    }
+                    break;
+                case 1:
+                    errorDescription = "Error reading ID card information";
+                    Logger.Error(errorDescription);
+                    break;
+                case 7:
+                    errorDescription = "System is out of memory";
+                    Logger.Error(errorDescription);
+                    break;
+                case 29:
+                    errorDescription = "Failed to save image file";
+                    Logger.Error(errorDescription);
+                    break;
+                case 41:
+                    errorDescription = "Failed to open the card reader";
+                    Logger.Error(errorDescription);
+                    break;
+                case 42:
+                    errorDescription = "No ID card detected - please place your ID card and try again";
+                    Logger.Warn(errorDescription);
+                    break;
+                case 43:
+                    errorDescription = "Failed to read ID card information";
+                    Logger.Error(errorDescription);
+                    break;
+                default:
+                    errorDescription = $"Card verification error code {e.error}";
+                    Logger.Error(errorDescription);
+                    break;
+            }
+
+            var eventArgs = new CzurCvrEventArgs
+            {
+                Error = e.error,
+                Type = e.type,
+                Result = e.bsrResult,
+                ErrorDescription = errorDescription
+            };
+
+            OnCvrEvent(eventArgs);
+        }
+
+        private void CZUROCX_EVENT_THUMBNAIL(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_THUMBNAILEvent e)
+        {
+            Logger.Debug("Thumbnail rotation completed");
+            var eventArgs = new CzurThumbnailEventArgs { Message = "Thumbnail rotation completed" };
+            OnThumbnailEvent(eventArgs);
+        }
+        private void CZUROCX_EVENT_IMAGE(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_IMAGEEvent e)
+        {
+            CzurImageEventStatus eventStatus = (CzurImageEventStatus)e.error;
+            var eventArgs = new CzurImageEventArgs { EventStatus = eventStatus };
+
+            switch (eventStatus)
+            {
+                case CzurImageEventStatus.Success:
+                    {
+                        List<BarCodeItem> barCodeItems = JsonConvert.DeserializeObject<List<BarCodeItem>>(e.bsrBarcode);
+                        eventArgs.BarCodeItems = barCodeItems;
+                        
+                        if (barCodeItems != null)
+                        {
+                            if (barCodeItems.Count() > 1)
+                            {
+                                Logger.Debug("Image captured successfully with {0} barcodes detected", barCodeItems.Count());
+                            }
+                            else
+                            {
+                                Logger.Debug("Image captured successfully - No barcodes found");
+                            }
+                        }
+                    }
+                    break;
+                case CzurImageEventStatus.ImageProcessingError:
+                    {
+                        eventArgs.ErrorMessage = "Image processing error occurred";
+                        Logger.Error(eventArgs.ErrorMessage);
+                    }
+                    break;
+                case CzurImageEventStatus.InsufficientSystemMemory:
+                    {
+                        eventArgs.ErrorMessage = "Insufficient system memory - image processing failed";
+                        Logger.Error(eventArgs.ErrorMessage);
+                    }
+                    break;
+                case CzurImageEventStatus.BlankImageDetected:
+                    {
+                        eventArgs.ErrorMessage = "Blank image detected - file cannot be saved";
+                        Logger.Warn(eventArgs.ErrorMessage);
+                    }
+                    break;
+                case CzurImageEventStatus.FailedToSaveImageFile:
+                    {
+                        eventArgs.ErrorMessage = "Failed to save image file - check path and permissions";
+                        Logger.Error(eventArgs.ErrorMessage);
+                    }
+                    break;
+                case CzurImageEventStatus.PDFPasswordProtected:
+                    {
+                        eventArgs.ErrorMessage = "Existing PDFs are password protected - images cannot be saved";
+                        Logger.Error(eventArgs.ErrorMessage);
+                    }
+                    break;
+            }
+
+            OnImageEvent(eventArgs);
+        }
+        #endregion
         #endregion
     }
 }

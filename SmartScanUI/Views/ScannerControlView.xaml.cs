@@ -47,6 +47,7 @@ namespace SmartScanUI.Views
         {
             _scannerHelper = new ScannerHelper(axCZUROcx1);
             _scannerHelper.StatusChanged += ScannerHelper_StatusChanged;
+            _scannerHelper.ImageEvent += ScannerHelper_ImageEvent;
             _scannerHelper.Initialize();
         }
 
@@ -59,9 +60,38 @@ namespace SmartScanUI.Views
             });
         }
 
+        private void ScannerHelper_ImageEvent(object sender, SmartScanUI.Scanner.CZUR.CzurEngine.CzurImageEventArgs e)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                System.Diagnostics.Debug.WriteLine($"[Image Event] Status: {e.EventStatus}");
+                
+                if (!string.IsNullOrEmpty(e.ErrorMessage))
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Image Event] Error: {e.ErrorMessage}");
+                }
+
+                if (e.BarCodeItems != null && e.BarCodeItems.Count > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[Image Event] Bar codes detected: {e.BarCodeItems.Count}");
+                    foreach (var barCode in e.BarCodeItems)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  - BarCode: {barCode.barCode}, Type: {barCode.type}");
+                    }
+                }
+            });
+        }
+
         private void ResetScanButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Reset Scan button clicked!", "Reset Scan", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (_scannerHelper != null)
+            {
+                _scannerHelper.UnInitialize();
+            }
+            else
+            {
+                MessageBox.Show("Scanner is not initialized.", "Reset Scan", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
     }
 }

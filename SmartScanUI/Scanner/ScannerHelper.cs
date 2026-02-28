@@ -5,6 +5,7 @@ using SmartScanUI.Scanner.CZUR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,22 +18,107 @@ namespace SmartScanUI.Scanner
         CZUR.CzurEngine engine;
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
+        public event EventHandler<CZUR.CzurEngine.CzurImageEventArgs> ImageEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurHttpEventArgs> HttpEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurGrabEventArgs> GrabEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurMultiObjEventArgs> MultiObjEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurOcrEventArgs> OcrEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurPdfEventArgs> PdfEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurRecordEventArgs> RecordEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurCfmEventArgs> CfmEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurCvrEventArgs> CvrEvent;
+        public event EventHandler<CZUR.CzurEngine.CzurThumbnailEventArgs> ThumbnailEvent;
 
         public ScannerHelper(AxCZUROcxLib.AxCZUROcx activeXScanner)
         {
             engine = new CZUR.CzurEngine(activeXScanner);
-            activeXScanner.CZUR_EVENT_IMAGE += CZUROCX_EVENT_IMAGE;
-            //axCZUROcx1.CZUR_EVENT_PDF += CZUROCX_EVENT_PDF;
-            //axCZUROcx1.CZUR_EVENT_HTTP += CZUROCX_EVENT_HTTP;
-            //axCZUROcx1.CZUR_EVENT_RECORD += CZUROCX_EVENT_RECORD;
-            //axCZUROcx1.CZUR_EVENT_BASE64 += CZUROCX_EVENT_BASE64;
-            //axCZUROcx1.CZUR_EVENT_GRAB += CZUROCX_EVENT_GRAB;
-            //axCZUROcx1.CZUR_EVENT_THUMBNAIL += CZUROCX_EVENT_THUMBNAIL;
-            //axCZUROcx1.CZUR_EVENT_OCR += CZUROCX_EVENT_OCR;
-            //axCZUROcx1.CZUR_EVENT_MULTIOBJ += CZUROCX_EVENT_MULTIOBJ;
-            //axCZUROcx1.CZUR_EVENT_CVR += CZUROCX_EVENT_CVR;
-            //axCZUROcx1.CZUR_EVENT_CFM += CZUROCX_EVENT_CFM;
+            
+            // Subscribe to all engine events
+            engine.ImageEvent += Engine_ImageEvent;
+            engine.HttpEvent += Engine_HttpEvent;
+            engine.GrabEvent += Engine_GrabEvent;
+            engine.MultiObjEvent += Engine_MultiObjEvent;
+            engine.OcrEvent += Engine_OcrEvent;
+            engine.PdfEvent += Engine_PdfEvent;
+            engine.RecordEvent += Engine_RecordEvent;
+            engine.CfmEvent += Engine_CfmEvent;
+            engine.CvrEvent += Engine_CvrEvent;
+            engine.ThumbnailEvent += Engine_ThumbnailEvent;
         }
+
+        #region "Event Handlers"
+        private void Engine_ImageEvent(object sender, CZUR.CzurEngine.CzurImageEventArgs e)
+        {
+            ImageEvent?.Invoke(this, e);
+            
+            // Play beep sound based on image capture success
+            if (e.EventStatus == CZUR.CzurImageEventStatus.Success)
+            {
+                SystemSounds.Asterisk.Play(); // Success beep - pleasant "ding" sound
+                Logger.Info("Image event successful - Success beep played");
+            }
+            else
+            {
+                SystemSounds.Hand.Play(); // Failed beep - error/warning sound
+                Logger.Warn("Image event failed with status: {0} - Failed beep played", e.EventStatus);
+            }
+        }
+
+        private void Engine_HttpEvent(object sender, CZUR.CzurEngine.CzurHttpEventArgs e)
+        {
+            HttpEvent?.Invoke(this, e);
+        }
+
+        private void Engine_GrabEvent(object sender, CZUR.CzurEngine.CzurGrabEventArgs e)
+        {
+            GrabEvent?.Invoke(this, e);
+            if(e.Type == 1) // Assuming Type 1 indicates a successful grab
+            {
+                Logger.Info("Grab event received: {0}", e.Description);
+
+                GrabImage(0, "C:\\ScannedImages\\scan.jpg", 75, 0, 0, 1, 1, 1, 85, 0);
+            }
+            else
+            {
+                Logger.Warn("Grab event with non-success type: {0}, Description: {1}", e.Type, e.Description);
+            }
+        }
+
+        private void Engine_MultiObjEvent(object sender, CZUR.CzurEngine.CzurMultiObjEventArgs e)
+        {
+            MultiObjEvent?.Invoke(this, e);
+        }
+
+        private void Engine_OcrEvent(object sender, CZUR.CzurEngine.CzurOcrEventArgs e)
+        {
+            OcrEvent?.Invoke(this, e);
+        }
+
+        private void Engine_PdfEvent(object sender, CZUR.CzurEngine.CzurPdfEventArgs e)
+        {
+            PdfEvent?.Invoke(this, e);
+        }
+
+        private void Engine_RecordEvent(object sender, CZUR.CzurEngine.CzurRecordEventArgs e)
+        {
+            RecordEvent?.Invoke(this, e);
+        }
+
+        private void Engine_CfmEvent(object sender, CZUR.CzurEngine.CzurCfmEventArgs e)
+        {
+            CfmEvent?.Invoke(this, e);
+        }
+
+        private void Engine_CvrEvent(object sender, CZUR.CzurEngine.CzurCvrEventArgs e)
+        {
+            CvrEvent?.Invoke(this, e);
+        }
+
+        private void Engine_ThumbnailEvent(object sender, CZUR.CzurEngine.CzurThumbnailEventArgs e)
+        {
+            ThumbnailEvent?.Invoke(this, e);
+        }
+        #endregion
 
         private void OnStatusChanged(string status)
         {
@@ -94,66 +180,59 @@ namespace SmartScanUI.Scanner
             }
         }
 
+        /// <summary>
+        /// Grab an image from the scanner
+        /// </summary>
+        /// <param name="deviceIndex">Camera index (0=main, 1=secondary)</param>
+        /// <param name="imageFilePath">Output file path for the captured image</param>
+        /// <param name="dpi">Resolution in DPI (150, 200, 300, etc.)</param>
+        /// <param name="colorMode">Color mode: 0=Auto, 1=B&W, 2=Gray, 3=Color</param>
+        /// <param name="rotation">Rotation: 0=None, 90, 180, 270 degrees</param>
+        /// <param name="autoAdjust">Enable auto-adjust: 0=Off, 1=On</param>
+        /// <param name="barCodeRecognition">Enable barcode recognition: 0=Off, 1=On</param>
+        /// <param name="blankPageDetection">Enable blank page detection: 0=Off, 1=On</param>
+        /// <param name="jpgQuality">JPG quality level: 1-100</param>
+        /// <param name="compression">Image format: 0=JPG, 1=PNG, 2=TIFF</param>
+        /// <returns>Error code (0=Success, non-zero=Error)</returns>
+        public int GrabImage(int deviceIndex, string imageFilePath, int dpi = 200, int colorMode = 0, 
+            int rotation = 0, int autoAdjust = 1, int barCodeRecognition = 1, 
+            int blankPageDetection = 1, int jpgQuality = 85, int compression = 0)
+        {
+            try
+            {
+                OnStatusChanged("Capturing image from scanner...");
+                Logger.Info("GrabImage initiated - File: {0}, DPI: {1}, ColorMode: {2}", imageFilePath, dpi, colorMode);
+                
+                int errorCode = engine.GrabImage(deviceIndex, imageFilePath, dpi, colorMode, rotation, 
+                    autoAdjust, barCodeRecognition, blankPageDetection, jpgQuality, compression);
+
+                if (errorCode == 0)
+                {
+                    OnStatusChanged("Image captured successfully. Processing...");
+                    Logger.Info("Image captured successfully: {0}", imageFilePath);
+                }
+                else
+                {
+                    OnStatusChanged($"Image capture failed with error code {errorCode}");
+                    Logger.Error("GrabImage failed with error code: {0}", errorCode);
+                }
+
+                return errorCode;
+            }
+            catch (Exception ex)
+            {
+                OnStatusChanged($"Error during image capture: {ex.Message}");
+                Logger.Error(ex, "Error during image capture");
+                return -1;
+            }
+        }
+
         public class StatusChangedEventArgs : EventArgs
         {
             public string Status { get; set; }
             public DateTime Timestamp { get; set; }
         }
-        public class BarCodeItem
-        {
-            public string barCode { get; set; }
-            public int type { get; set; }
-        }
-        private void CZUROCX_EVENT_IMAGE(object sender, AxCZUROcxLib._DCZUROcxEvents_CZUR_EVENT_IMAGEEvent e)
-        {
-            CzurImageEventStatus eventStatus = (CzurImageEventStatus)e.error;
-            switch (eventStatus)
-            {
-                case CzurImageEventStatus.Success:
-                    {
-                        List<BarCodeItem> barCodeItems = JsonConvert.DeserializeObject<List<BarCodeItem>>(e.bsrBarcode);
-                        if (barCodeItems != null)
-                        {
-                            if (barCodeItems.Count() > 1)
-                            {
-                                Logger.Debug("BarCodes Found: {0} barcodes detected", barCodeItems.Count());
-                                //BarCodes Found, you can handle multiple barcodes here
-                            }
-                            else
-                            {
-                                Logger.Debug("No barCode Found");
-                                //No barCode Found, you can handle this case here
-                            }
-                        }
-                    }
-                    break;
-                case CzurImageEventStatus.ImageProcessingError:
-                    {
-                        Logger.Error("Image processing error occurs");
-                    }
-                    break;
-                case CzurImageEventStatus.InsufficientSystemMemory:
-                    {
-                        Logger.Error("Insufficient system memory, image processing failed");
-                    }
-                    break;
-                case CzurImageEventStatus.BlankImageDetected:
-                    {
-                        Logger.Warn("Blank image detected. The file cannot be saved");
-                    }
-                    break;
-                case CzurImageEventStatus.FailedToSaveImageFile:
-                    {
-                        Logger.Error("Failed to save image file, please check if the path is valid and has sufficient permissions");
-                    }
-                    break;
-                case CzurImageEventStatus.PDFPasswordProtected:
-                    {
-                        Logger.Error("Existing PDFs are password protected. Images cannot be saved");
-                    }
-                    break;
-            }
-        }
+       
 
     }
 }
