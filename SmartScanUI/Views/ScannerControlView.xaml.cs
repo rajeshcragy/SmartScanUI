@@ -133,9 +133,13 @@ namespace SmartScanUI.Views
 
         private void StartScanButton_Click(object sender, RoutedEventArgs e)
         {
-            _scannerHelper = new ScannerHelper(axCZUROcx1, MasterSettingsModel);
-            _scannerHelper.StatusChanged += ScannerHelper_StatusChanged;
-            _scannerHelper.ImageEvent += ScannerHelper_ImageEvent;
+            if (_scannerHelper == null)
+            {
+                _scannerHelper = new ScannerHelper(axCZUROcx1, MasterSettingsModel);
+                _scannerHelper.StatusChanged += ScannerHelper_StatusChanged;
+                _scannerHelper.ImageEvent += ScannerHelper_ImageEvent;
+                CreateNewSession();
+            }
             _scannerHelper.Initialize();
             
             // Update button states: disable Start Scan, enable Reset Scan
@@ -208,14 +212,36 @@ namespace SmartScanUI.Views
 
         private void CreateNewSession()
         {
-            // Create a new session
-            MessageBox.Show("New Session Created!", "New Session", MessageBoxButton.OK, MessageBoxImage.Information);
-            
-            // You can add your custom logic here to create a new scanning session
-            System.Diagnostics.Debug.WriteLine("New Session Started via Button Click or F5 Key Press");
-            
-            // Example: Add a new session to the view model
-            // _viewModel.AddNewSession();
+            try
+            {
+                // Check if scanner helper is initialized
+                if (_scannerHelper != null)
+                {
+                    // Create a new session through scanner helper
+                    var newSession = _scannerHelper.CreateNewSession();
+                    
+                    if (newSession != null)
+                    {
+                        Logger.Info("New Session Created - ID: {0}", newSession.id);
+                    }
+                    else
+                    {
+                        Logger.Warn("Failed to create new session");
+                    }
+                }
+                else
+                {
+                    Logger.Warn("Scanner is not initialized. Initialize scanner first.");
+                    MessageBox.Show("Please start the scanner before creating a new session", 
+                        "Scanner Not Initialized", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error creating new session");
+                MessageBox.Show($"Error creating new session: {ex.Message}", 
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

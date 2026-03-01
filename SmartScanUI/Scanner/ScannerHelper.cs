@@ -5,10 +5,12 @@ using SmartScanUI.Models;
 using SmartScanUI.Scanner.CZUR;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SmartScanUI.Scanner
 {
@@ -22,6 +24,7 @@ namespace SmartScanUI.Scanner
         CollageModel activeCollageSettings;
         String activeUserDetailsPath;
         String activeScanningPath;
+        public SessionModel sessionModel;
 
 
         public event EventHandler<StatusChangedEventArgs> StatusChanged;
@@ -59,10 +62,121 @@ namespace SmartScanUI.Scanner
         }
 
         #region "Event Handlers"
+        /// <summary>
+        /// Resets and initializes a new SessionModel for a fresh scanning session
+        /// </summary>
+        private void Reset_SessionModel()
+        {
+            try
+            {
+                // Create a new session with unique ID and current timestamp
+                this.sessionModel = new SessionModel
+                {
+                    id = Guid.NewGuid().ToString(),
+                    StartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                    EndTime = string.Empty,
+                    PageCount = 0,
+                    Pages = new List<PageModel>(),
+                    Barcodes = new List<BarcodeModel>()
+                };
+
+                Logger.Info("New Session Created - Session ID: {0}, Organization: {1}, User Path: {2}", 
+                    sessionModel.id, activeCollageSettings?.Name ?? "Unknown", activeScanningPath);
+                Prepare_SessionPage();
+                OnStatusChanged($"New Session Started - ID: {sessionModel.id}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error creating new session model");
+                OnStatusChanged($"Error creating new session: {ex.Message}");
+            }
+        }
+
+        private void Prepare_ScanningDirectory()
+        {
+            string FailedDirectoryPath = System.IO.Path.Combine(activeScanningPath, "FailedScans");
+            string SuccessDirectoryPath = System.IO.Path.Combine(activeScanningPath, "SuccessfulScans");
+            string ReadytoUploadDirectoryPath = System.IO.Path.Combine(activeScanningPath, "ReadyToUpload");
+            try
+            {
+                if(Directory.Exists(activeScanningPath) == false)
+                {
+                    Directory.CreateDirectory(activeScanningPath);
+                    Logger.Info("Created scanning directory at path: {0}", activeScanningPath);
+                }
+                if(Directory.Exists(FailedDirectoryPath) == false)
+                {
+                    Directory.CreateDirectory(FailedDirectoryPath);
+                    Logger.Info("Created FailedScans directory at path: {0}", FailedDirectoryPath);
+                }
+                if(Directory.Exists(SuccessDirectoryPath) == false)
+                {
+                    Directory.CreateDirectory(SuccessDirectoryPath);
+                    Logger.Info("Created SuccessfulScans directory at path: {0}", SuccessDirectoryPath);
+                }
+                if(Directory.Exists(ReadytoUploadDirectoryPath) == false)
+                {
+                    Directory.CreateDirectory(ReadytoUploadDirectoryPath);
+                    Logger.Info("Created ReadyToUpload directory at path: {0}", ReadytoUploadDirectoryPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error preparing scanning directory");
+                OnStatusChanged($"Error preparing scanning directory: {ex.Message}");
+            }
+        }
+        private void Prepare_SessionPage()
+        {
+            try
+            {
+                int newPageNo = sessionModel.PageCount + 1;
+                string newPagePath = System.IO.Path.Combine(activeScanningPath, $"{sessionModel.id}_page{newPageNo}.jpg");
+                Prepare_ScanningDirectory();
+                PageModel newPage = new PageModel
+                {
+                    PageNo = newPageNo,
+                    Path = newPagePath,
+                    StartTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                    EndTime = string.Empty,
+                    FirstPage = newPageNo == 1,
+                    LastPage = false,
+                    BookViewPage = !(newPageNo == 1),
+                };
+                activeScannerSettings.BarCodeRecognition = newPage.FirstPage ? 1 : 0; // Enable barcode recognition only for the first page
+                activeScannerSettings.ProcessType = newPage.FirstPage ? 2 :4; 
+                sessionModel.Pages.Add(newPage);
+                sessionModel.PageCount = newPageNo;
+                SetScannerProcessType();
+                System.IO.File.WriteAllText(System.IO.Path.Combine(activeScanningPath, $"{sessionModel.id}_session.json"), JsonConvert.SerializeObject(sessionModel));
+                Logger.Info("Prepared new page for scanning - Page No: {0}, Path: {1}", newPage.PageNo, newPage.Path);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error preparing session page");
+                OnStatusChanged($"Error preparing page for scanning: {ex.Message}");
+            }
+
+        }
+
         private void Engine_ImageEvent(object sender, CZUR.CzurEngine.CzurImageEventArgs e)
         {
             ImageEvent?.Invoke(this, e);
-            
+            if (e.BarCodeItems != null && e.BarCodeItems.Count > 0)
+            {
+                foreach (var item in e.BarCodeItems)
+                {
+                    BarcodeModel barcode = new BarcodeModel
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        Type = item.type.ToString(),
+                        Value = item.barCode,
+                        BarCodePage = sessionModel.Pages.LastOrDefault()?.PageNo ?? 0
+                    };
+                    sessionModel.Barcodes.Add(barcode);
+                    Logger.Info("Barcode detected - Type: {0}, Value: {1}, Page: {2}", barcode.Type, barcode.Value, barcode.BarCodePage);
+                }
+            }
             // Play beep sound based on image capture success
             if (e.EventStatus == CZUR.CzurImageEventStatus.Success)
             {
@@ -79,12 +193,9 @@ namespace SmartScanUI.Scanner
                 Logger.Warn("Image event failed with status: {0} - Failed beep played", e.EventStatus);
                 OnStatusChanged("Scanned page Failed, Please check");
             }
+            Prepare_SessionPage();
         }
 
-        private void Engine_HttpEvent(object sender, CZUR.CzurEngine.CzurHttpEventArgs e)
-        {
-            HttpEvent?.Invoke(this, e);
-        }
 
         private void Engine_GrabEvent(object sender, CZUR.CzurEngine.CzurGrabEventArgs e)
         {
@@ -95,7 +206,8 @@ namespace SmartScanUI.Scanner
 
                 GrabImage(
                     activeScannerSettings.CameraIndex,
-                    "C:\\ScannedImages\\scan.jpg",
+                    sessionModel.Pages.LastOrDefault()?.Path,
+                    //"C:\\ScannedImages\\scan.jpg",
                     activeScannerSettings.DPI, activeScannerSettings.ColorMode, activeScannerSettings.Rotation,
                     activeScannerSettings.AutoAdjust,activeScannerSettings.BarCodeRecognition,activeScannerSettings.BlankPageDetection,
                     activeScannerSettings.JpgQuality, activeScannerSettings.Compression);
@@ -105,6 +217,11 @@ namespace SmartScanUI.Scanner
                 Logger.Warn("Grab event with non-success type: {0}, Description: {1}", e.Type, e.Description);
             }
         }
+        private void Engine_HttpEvent(object sender, CZUR.CzurEngine.CzurHttpEventArgs e)
+        {
+            HttpEvent?.Invoke(this, e);
+        }
+
 
         private void Engine_MultiObjEvent(object sender, CZUR.CzurEngine.CzurMultiObjEventArgs e)
         {
@@ -174,7 +291,7 @@ namespace SmartScanUI.Scanner
             OnStatusChanged("Device opened. Configuring process type...");
             Logger.Info("Device opened. Configuring process type...");
 
-            status = engine.SetProcessType(activeScannerSettings.ProcessType);
+            status = SetScannerProcessType();
             if (!string.IsNullOrEmpty(status))
             {
                 OnStatusChanged($"Failed to set process type: {status}");
@@ -185,6 +302,11 @@ namespace SmartScanUI.Scanner
             OnStatusChanged("Scanner ready. Waiting for scan...");
             Logger.Info("Scanner ready. Waiting for scan...");
             return string.Empty;
+        }
+
+        private string SetScannerProcessType()
+        {
+            return engine.SetProcessType(activeScannerSettings.ProcessType);
         }
 
         public void UnInitialize()
@@ -255,6 +377,26 @@ namespace SmartScanUI.Scanner
         {
             public string Status { get; set; }
             public DateTime Timestamp { get; set; }
+        }
+
+        /// <summary>
+        /// Creates and initializes a new scanning session
+        /// Should be called when user clicks "New Session" button or presses F5
+        /// </summary>
+        public SessionModel CreateNewSession()
+        {
+            try
+            {
+                Reset_SessionModel();
+                Logger.Info("New Session Created Successfully");
+                return sessionModel;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Failed to create new session");
+                OnStatusChanged($"Failed to create new session: {ex.Message}");
+                return null;
+            }
         }
        
 

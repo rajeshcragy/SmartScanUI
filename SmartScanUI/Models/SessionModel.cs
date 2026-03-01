@@ -16,7 +16,7 @@ namespace SmartScanUI.Models
         public string EndTime { get; set; }
 
         [JsonProperty("PageCount")]
-        public string PageCount { get; set; }
+        public int PageCount { get; set; }
 
         [JsonProperty("Pages")]
         public List<PageModel> Pages { get; set; }
@@ -34,7 +34,7 @@ namespace SmartScanUI.Models
         public string Id => id;
         public DateTime StartTimeValue => ParseDateTime(StartTime);
         public DateTime EndTimeValue => ParseDateTime(EndTime);
-        public int PageCountValue => int.TryParse(PageCount, out int count) ? count : 0;
+        public int PageCountValue => PageCount;
 
         private DateTime ParseDateTime(string dateTimeStr)
         {
@@ -49,7 +49,7 @@ namespace SmartScanUI.Models
     public class PageModel
     {
         [JsonProperty("PageNo")]
-        public string PageNo { get; set; }
+        public int PageNo { get; set; }
 
         [JsonProperty("Path")]
         public string Path { get; set; }
@@ -75,11 +75,14 @@ namespace SmartScanUI.Models
         [JsonProperty("id")]
         public string id { get; set; }
 
+        [JsonProperty("Type")]
+        public string Type { get; set; }
+
         [JsonProperty("Value")]
         public string Value { get; set; }
 
         [JsonProperty("BarCodePage")]
-        public string BarCodePage { get; set; }
+        public int BarCodePage { get; set; }
 
         public string Id => id;
     }
