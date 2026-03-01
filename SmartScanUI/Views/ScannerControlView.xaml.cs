@@ -202,11 +202,17 @@ namespace SmartScanUI.Views
 
         private void UserControl_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            // Check if F5 key is pressed
+            // Check if F5 key is pressed (Create New Session)
             if (e.Key == System.Windows.Input.Key.F5)
             {
                 CreateNewSession();
                 e.Handled = true; // Mark the event as handled to prevent default F5 behavior
+            }
+            // Check if F9 is pressed (Mark Last Page)
+            else if (e.Key == System.Windows.Input.Key.F9)
+            {
+                MarkLastPage();
+                e.Handled = true; // Mark the event as handled to prevent default spacebar behavior
             }
         }
 
@@ -240,6 +246,36 @@ namespace SmartScanUI.Views
             {
                 Logger.Error(ex, "Error creating new session");
                 MessageBox.Show($"Error creating new session: {ex.Message}", 
+                    "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Marks the last page of the current scanning session
+        /// Called when Spacebar is pressed
+        /// </summary>
+        private void MarkLastPage()
+        {
+            try
+            {
+                // Check if scanner helper is initialized
+                if (_scannerHelper != null)
+                {
+                    // Call LastPagePrepare to mark the last page
+                    _scannerHelper.LastPagePrepare();
+                    Logger.Info("Last page marked for current session");
+                }
+                else
+                {
+                    Logger.Warn("Scanner is not initialized. Initialize scanner first.");
+                    MessageBox.Show("Please start the scanner before marking the last page", 
+                        "Scanner Not Initialized", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error marking last page");
+                MessageBox.Show($"Error marking last page: {ex.Message}", 
                     "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

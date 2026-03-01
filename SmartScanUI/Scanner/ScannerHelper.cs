@@ -159,6 +159,28 @@ namespace SmartScanUI.Scanner
 
         }
 
+        public void LastPagePrepare()
+        {
+            try
+            {
+                var lastPage = sessionModel.Pages.LastOrDefault();
+                if (lastPage != null)
+                {
+                    lastPage.LastPage = true;
+                    lastPage.BookViewPage = false;
+                    activeScannerSettings.ProcessType = 2;
+                    SetScannerProcessType();
+                    sessionModel.Pages[sessionModel.Pages.Count - 1] = lastPage;
+                    System.IO.File.WriteAllText(System.IO.Path.Combine(activeScanningPath, $"{sessionModel.id}_session.json"), JsonConvert.SerializeObject(sessionModel));
+                    Logger.Info("Marked last page of session - Page No: {0}", lastPage.PageNo);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error marking last page of session");
+                OnStatusChanged($"Error marking last page: {ex.Message}");
+            }
+        }
         private void Engine_ImageEvent(object sender, CZUR.CzurEngine.CzurImageEventArgs e)
         {
             ImageEvent?.Invoke(this, e);
