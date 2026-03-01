@@ -5,6 +5,7 @@ using SmartScanUI.Models;
 using SmartScanUI.Scanner.CZUR;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -14,6 +15,8 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace SmartScanUI.Scanner
 {
+
+
     public class ScannerHelper
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -126,10 +129,76 @@ namespace SmartScanUI.Scanner
                 OnStatusChanged($"Error preparing scanning directory: {ex.Message}");
             }
         }
+
+        private void Close_Session()
+        {
+            try
+            {
+                sessionModel.EndTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+                System.IO.File.WriteAllText(System.IO.Path.Combine(activeScanningPath, $"{sessionModel.id}_session.json"), JsonConvert.SerializeObject(sessionModel));
+
+                string successDirectory = string.Empty;
+                if (sessionModel.Barcodes.Count > 0)
+                {
+                     successDirectory = System.IO.Path.Combine(activeScanningPath, String.Format("{0}\\{1}", "SuccessfulScans", sessionModel.Barcodes.FirstOrDefault().Value));
+                }
+                else
+                {
+                    successDirectory = System.IO.Path.Combine(activeScanningPath, String.Format("{0}\\{1}", "SuccessfulScans", sessionModel.id));
+                }
+                Directory.CreateDirectory(System.IO.Path.Combine(successDirectory));
+
+                foreach(string f in Directory.GetFiles(activeScanningPath, "*.*"))
+                {
+                    FileInfo fileInfo= new FileInfo(f);
+                    string destnationFilePath = System.IO.Path.Combine(successDirectory, fileInfo.Name);
+                    System.IO.File.Move(f, destnationFilePath);
+                    Logger.Info("Moved scanned page to SuccessfulScans - Source: {0}, Destination: {1}", f, successDirectory);
+                }
+
+                foreach (string f in Directory.GetFiles(successDirectory, "*.jpg"))
+                {
+                    if (sessionModel.Barcodes.Count > 0)
+                    {
+                        string renameFileTo = f.Replace(sessionModel.id, sessionModel.Barcodes.FirstOrDefault().Value);
+                        System.IO.File.Move(f, renameFileTo);
+                        Logger.Info("Renamed scanned page file - Source: {0}, Destination: {1}", f, renameFileTo);
+                    }
+                    else
+                    {
+                        Logger.Warn("No barcode found for session, skipping file rename - File: {0}", f);
+
+                    }
+                }
+                foreach (string f in Directory.GetFiles(successDirectory, "*.jpg"))
+                {
+                    engine.Create_PDF(successDirectory, f, sessionModel.Barcodes.FirstOrDefault().Value + ".pdf");
+                }
+
+                Logger.Info("Session closed successfully - Session ID: {0}", sessionModel.id);
+                OnStatusChanged($"Session closed - ID: {sessionModel.id}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error closing session");
+                OnStatusChanged($"Error closing session: {ex.Message}");
+            }
+        }
+
+
+
+
         private void Prepare_SessionPage()
         {
             try
             {
+                if(sessionModel.Pages.Count > 0 && sessionModel.Pages.LastOrDefault().LastPage)
+                {
+                    OnStatusChanged("Last Page Found, Preparing for Next steps");
+                    Close_Session();
+                    Reset_SessionModel();
+                    return;
+                }
                 int newPageNo = sessionModel.PageCount + 1;
                 string newPagePath = System.IO.Path.Combine(activeScanningPath, $"{sessionModel.id}_page{newPageNo}.jpg");
                 Prepare_ScanningDirectory();

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using NLog;
+using SmartScanUI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -144,6 +145,74 @@ namespace SmartScanUI.Scanner.CZUR
             axCZUROcx1.CZUR_Thumbnail_Add(imagefile);
             Logger.Info("Thumbnail event: {0}", imagefile);
             OnThumbnailEvent(new CzurThumbnailEventArgs { Message = imagefile });
+        }
+
+        public void Create_PDF(string folderPath,string ImageFile,string PDFFileName)
+        {
+            try
+            {
+                string pdfFile = System.IO.Path.Combine(folderPath, PDFFileName);
+
+                int statusCode = axCZUROcx1.CZUR_ImageToPDF(ImageFile, PDFFileName);
+                PdfCreationStatus status = (PdfCreationStatus)statusCode;
+
+                HandlePdfCreationStatus(status, pdfFile);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error in Create_PDF method");
+            }
+        }
+
+        /// <summary>
+        /// Handles PDF creation status codes and provides appropriate logging
+        /// </summary>
+        /// <param name="status">The PDF creation status enum</param>
+        /// <param name="pdfFilePath">The path where the PDF should be created</param>
+        private void HandlePdfCreationStatus(PdfCreationStatus status, string pdfFilePath)
+        {
+            switch (status)
+            {
+                case PdfCreationStatus.Success:
+                    Logger.Info("PDF created successfully - Path: {0}", pdfFilePath);
+                    break;
+
+                case PdfCreationStatus.ErrorEnablingPdfComposition:
+                    Logger.Error("Error occurred while enabling PDF composition");
+                    break;
+
+                case PdfCreationStatus.EnvironmentNotInitialized:
+                    Logger.Error("CZUROcx environment is not initialized");
+                    break;
+
+                case PdfCreationStatus.PdfFileNameIsNull:
+                    Logger.Error("PDF file name is null");
+                    break;
+
+                case PdfCreationStatus.InvalidJpgCompressionQuality:
+                    Logger.Error("Invalid JPG compression quality");
+                    break;
+
+                case PdfCreationStatus.DeviceNotConnected:
+                    Logger.Error("Device is not connected");
+                    break;
+
+                case PdfCreationStatus.DeviceDoesNotSupportPdfComposition:
+                    Logger.Error("The device does not support PDF composition");
+                    break;
+
+                case PdfCreationStatus.NoImageFileAdded:
+                    Logger.Warn("No image file is added");
+                    break;
+
+                case PdfCreationStatus.PdfCompositionInProgress:
+                    Logger.Info("PDF composition is in progress, please wait...");
+                    break;
+
+                default:
+                    Logger.Warn("Unknown PDF creation status code: {0}", (int)status);
+                    break;
+            }
         }
 
         private string GetGrabImageErrorMessage(int errorCode)

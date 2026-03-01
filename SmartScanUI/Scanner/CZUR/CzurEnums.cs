@@ -6,6 +6,21 @@ using System.Threading.Tasks;
 
 namespace SmartScanUI.Scanner.CZUR
 {
+    /// <summary>
+    /// Enumeration for PDF creation status codes from CZUR scanner
+    /// </summary>
+    public enum PdfCreationStatus
+    {
+        Success = 0,
+        ErrorEnablingPdfComposition = 1,
+        EnvironmentNotInitialized = 2,
+        PdfFileNameIsNull = 4,
+        InvalidJpgCompressionQuality = 6,
+        DeviceNotConnected = 17,
+        DeviceDoesNotSupportPdfComposition = 18,
+        NoImageFileAdded = 20,
+        PdfCompositionInProgress = 23
+    }
     internal enum CzurInitializationStatus
     {
         Success = 0,
